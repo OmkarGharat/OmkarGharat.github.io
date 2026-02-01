@@ -1,0 +1,25 @@
+{
+  "name": "omkargharat.github.io",
+  "version": "1.0.0",
+  "description": "This wiki-style blog documents my learning journey, technical notes, and projects.",
+  "main": "index.js",
+  "scripts": {
+    "start": "docsify serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmkarGharat/OmkarGharat.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/OmkarGharat/OmkarGharat.github.io/issues"
+  },
+  "homepage": "https://github.com/OmkarGharat/OmkarGharat.github.io#readme",
+  "devDependencies": {
+    "docsify-cli": "^4.4.4"
+  }
+}

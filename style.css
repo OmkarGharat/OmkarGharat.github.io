@@ -1,0 +1,232 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    /* Premium Dark Theme Palette */
+    --base-font: 'Outfit', sans-serif;
+    --code-font: 'JetBrains Mono', monospace;
+
+    --bg-color: #0f1115;
+    --sidebar-bg: #161b22;
+    --sidebar-border: #30363d;
+    --text-color: #e6edf3;
+    --heading-color: #ffffff;
+    --accent-color: #58a6ff;
+    --accent-gradient: linear-gradient(135deg, #58a6ff 0%, #8b5cf6 100%);
+    --link-color: #58a6ff;
+    --code-bg: #1f242c;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(22, 27, 34, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+    /* Docsify Overrides */
+    --theme-color: #58a6ff;
+}
+
+body {
+    font-family: var(--base-font);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    padding-top: 20px;
+}
+
+.sidebar-nav {
+    padding-bottom: 40px;
+}
+
+.sidebar-nav li {
+    margin: 6px 0;
+}
+
+.sidebar-nav ul li a {
+    font-size: 15px;
+    /* Slightly larger text */
+    color: #8b949e;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 0 10px;
+}
+
+.sidebar-nav ul li a:hover {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.sidebar-nav ul li.active>a {
+    background: var(--accent-gradient);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+}
+
+/* App Name in Sidebar */
+.app-name-link {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 10px;
+    display: block;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* Main Content */
+.content {
+    padding-top: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Coverpage Override - Force Dark Mode */
+section.cover {
+    background: linear-gradient(to bottom right, #0f1115, #161b22) !important;
+    color: var(--text-color) !important;
+}
+
+section.cover h1 {
+    font-weight: 800;
+    color: var(--heading-color) !important;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+section.cover blockquote {
+    font-size: 1.5rem;
+    color: #c9d1d9 !important;
+}
+
+section.cover .cover-main>p:last-child a {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+section.cover .cover-main>p:last-child a:hover {
+    background: var(--accent-gradient);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+}
+
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+    font-family: var(--base-font);
+    color: var(--heading-color);
+    font-weight: 700;
+    margin-top: 1.5em;
+}
+
+.markdown-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.markdown-section h2 {
+    border-bottom: 1px solid var(--sidebar-border);
+    padding-bottom: 0.5rem;
+}
+
+.markdown-section p {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #c9d1d9;
+}
+
+.markdown-section a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.markdown-section a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+}
+
+.markdown-section code {
+    font-family: var(--code-font);
+    background-color: rgba(110, 118, 129, 0.2);
+    color: #e6edf3;
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.markdown-section pre {
+    background-color: var(--code-bg);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.markdown-section blockquote {
+    border-left: 4px solid var(--accent-color);
+    background: rgba(88, 166, 255, 0.05);
+    /* Very subtle tint */
+    margin: 1.5em 0;
+    padding: 1em 1.5em;
+    border-radius: 0 12px 12px 0;
+    color: #c9d1d9;
+}
+
+/* Search Box */
+.sidebar .search {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--sidebar-border);
+}
+
+.sidebar .search input {
+    background: var(--code-bg);
+    border: 1px solid var(--sidebar-border);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.sidebar .search input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #58a6ff;
+}

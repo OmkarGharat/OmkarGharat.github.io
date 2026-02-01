@@ -1,0 +1,6 @@
+* [Home](/)
+* [Blog](/blog/)
+    * [My First Post](/blog/posts/introduction)
+    * [Tech Stack](/blog/posts/tech-stack)
+* [Projects](/projects/)
+* [About](/about)

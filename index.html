@@ -2,27 +2,54 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>My Notes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Docsify theme -->
+  <title>Omkar's Digital Garden</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Personal knowledge base and blog of Omkar Gharat">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <!-- Base Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify/themes/dark.css">
+  
+  <!-- Custom Premium Theme -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">Please wait...</div>
 
   <script>
     window.$docsify = {
-      name: 'My Knowledge Book',
-      repo: '',
+      name: 'Omkar Gharat',
+      nameLink: '/',
+      repo: '', 
+      themeColor: '#58a6ff',
       loadSidebar: true,
+      loadNavbar: true,
+      coverpage: true,
+      auto2top: true,
       subMaxLevel: 3,
-      search: 'auto'
+      sidebarDisplayLevel: 1,
+      search: {
+        maxAge: 86400000, 
+        paths: 'auto',
+        placeholder: 'Type to search...',
+        noData: 'No results found.',
+        depth: 6,
+        hideOtherSidebarContent: false,
+      },
+      copyCode: {
+        buttonText: 'Copy',
+        errorText: 'Error',
+        successText: 'Copied'
+      }
     }
   </script>
 
-  <!-- Docsify -->
+  <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+  
+  <!-- Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
 </body>
 </html>
