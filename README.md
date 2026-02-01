@@ -1,1 +1,3 @@
-# OmkarGharat.github.io
+# Welcome 👋
+
+This is my personal knowledge base.
