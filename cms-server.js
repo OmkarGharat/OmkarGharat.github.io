@@ -1,10 +1,9 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
-const PORT = 50171;
-const IGNORE = ['.git', 'node_modules', '_sidebar.md', '_navbar.md', '_coverpage.md', 'package.json', 'package-lock.json', '.gitignore', 'cms-server.js', 'gen-sidebar.js'];
+let PORT = 50171;
+const IGNORE = ['.git', 'node_modules', '_sidebar.md', '_navbar.md', '_coverpage.md', 'package.json', 'package-lock.json', '.gitignore', 'cms-server.js', 'gen-sidebar.js', '.nojekyll'];
 
 // --- SIDEBAR GENERATOR LOGIC ---
 function getTitle(filePath, defaultValue) {
@@ -19,6 +18,12 @@ function getTitle(filePath, defaultValue) {
 
 function generateSidebar(dir, level = 0) {
     let sidebar = '';
+
+    // Initial Home link only at top level
+    if (level === 0) {
+        sidebar += `* [Home](/) \n`;
+    }
+
     const items = fs.readdirSync(dir, { withFileTypes: true })
         .filter(item => !IGNORE.includes(item.name) && !item.name.startsWith('.'));
 
@@ -41,11 +46,8 @@ function generateSidebar(dir, level = 0) {
             sidebar += `${indent}* [${title}](${link})\n`;
             sidebar += generateSidebar(fullPath, level + 1);
         } else if (item.name.endsWith('.md')) {
-            if (item.name === 'README.md' && level > 0) continue;
-            if (item.name === 'README.md' && level === 0) {
-                sidebar = `* [Home](/) \n` + sidebar;
-                continue;
-            }
+            if (item.name === 'README.md') continue;
+
             const title = getTitle(fullPath, item.name.replace('.md', ''));
             sidebar += `${indent}* [${title}](/${relativePath})\n`;
         }
@@ -81,7 +83,7 @@ const server = http.createServer((req, res) => {
         let body = '';
         req.on('data', chunk => { body += chunk.toString(); });
         req.on('end', () => {
-            const data = JSON.parse(body); // { folder: 'blog/posts', title: 'My New Post' }
+            const data = JSON.parse(body);
             const fileName = data.title.toLowerCase().replace(/ /g, '-') + '.md';
             const dirPath = path.join(process.cwd(), data.folder);
             const filePath = path.join(dirPath, fileName);
@@ -100,11 +102,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Static File Serving (Mimicking docsify serve)
+    // Static File Serving
     let filePath = '.' + req.url;
     if (filePath === './') filePath = './index.html';
-
-    // Remove query strings for file path
     filePath = filePath.split('?')[0];
 
     // Auto-append .md if it's a docsify route
@@ -141,15 +141,27 @@ const server = http.createServer((req, res) => {
     });
 });
 
-// Run Initial Sidebar Gen
-const sidebar = generateSidebar(process.cwd());
-fs.writeFileSync('_sidebar.md', sidebar);
+// Function to start server with port hunting
+function startServer(port) {
+    server.listen(port, () => {
+        // Run Initial Sidebar Gen
+        const sidebarContent = generateSidebar(process.cwd());
+        fs.writeFileSync('_sidebar.md', sidebarContent);
 
-server.listen(PORT, () => {
-    console.log(`
+        console.log(`
 🚀 Digital Garden CMS is Live!
 --------------------------------
-🌍 Site: http://localhost:${PORT}
+🌍 Site: http://localhost:${port}
 ✍️  Write mode: Enabled (Local only)
-    `);
-});
+        `);
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.log(`⚠️  Port ${port} is busy, trying ${port + 1}...`);
+            startServer(port + 1);
+        } else {
+            console.error('❌ Server error:', err);
+        }
+    });
+}
+
+startServer(PORT);

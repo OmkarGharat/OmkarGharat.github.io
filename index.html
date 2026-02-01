@@ -27,20 +27,24 @@
     }
 
     .cms-btn {
-      background: #58a6ff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
+      background: linear-gradient(135deg, #58a6ff 0%, #8b5cf6 100%);
+      color: #0f1115;
+      /* Deep background color for high-end contrast */
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 24px;
       border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: all 0.2s;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .cms-btn:hover {
-      transform: scale(1.05);
-      background: #8b5cf6;
+      transform: translateY(-2px);
+      filter: brightness(1.1);
     }
 
     #editor-container {
@@ -74,25 +78,115 @@
     .editor-toolbar button:hover {
       background: #30363d !important;
     }
+
+    /* Custom Modal Styles */
+    #cms-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cms-modal {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 30px;
+      border-radius: 20px;
+      width: 400px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    #cms-modal h3 {
+      margin-top: 0;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    #cms-modal label {
+      display: block;
+      margin-bottom: 8px;
+      color: #8b949e;
+      font-size: 14px;
+    }
+
+    #cms-modal input,
+    #cms-modal select {
+      width: 100%;
+      background: #0f1115;
+      border: 1px solid #30363d;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    #cms-modal input:focus {
+      border-color: #58a6ff;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
   </style>
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
   <div id="app">Please wait...</div>
 
+  <!-- Custom Modal -->
+  <div id="cms-modal-overlay">
+    <div id="cms-modal">
+      <h3>Create New Page</h3>
+      <label>Page Title</label>
+      <input type="text" id="new-page-title" placeholder="e.g. My New Adventure">
+
+      <label>Category / Folder</label>
+      <select id="new-page-folder">
+        <option value="blog/posts">Blog Post</option>
+        <option value="projects">Project</option>
+        <option value="guides">Guide</option>
+        <option value="/">Root Directory</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="cms-btn" onclick="closeCreateModal()"
+          style="background:transparent; border:1px solid #30363d">Cancel</button>
+        <button class="cms-btn" onclick="submitCreatePage()">Create Page</button>
+      </div>
+    </div>
+  </div>
+
   <!-- CMS Buttons -->
   <div id="cms-controls">
-    <button class="cms-btn" onclick="openCreateModal()">+ New Page</button>
-    <button class="cms-btn" onclick="toggleEditor()">📝 Edit this Page</button>
+    <button class="cms-btn" onclick="openCreateModal()"><i data-lucide="plus-circle"></i> New Page</button>
+    <button class="cms-btn" onclick="toggleEditor()"><i data-lucide="edit-3"></i> Edit this Page</button>
   </div>
 
   <!-- Full Screen Editor -->
   <div id="editor-container">
-    <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
-      <h2 style="margin:0; color:white;">Editing: <span id="editing-filename"></span></h2>
-      <div>
-        <button class="cms-btn" onclick="saveChanges()" style="background:#238636">Save & Close</button>
-        <button class="cms-btn" onclick="toggleEditor()" style="background:#da3633">Cancel</button>
+    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin:0; color:white; font-family: 'Outfit', sans-serif;">Editing: <span id="editing-filename"
+          style="color:#58a6ff; font-weight: 400; font-size: 1.2rem;"></span></h2>
+      <div style="display:flex; gap:10px;">
+        <button class="cms-btn" onclick="saveChanges()" style="background:#238636; color:white;"><i
+            data-lucide="check"></i> Save &
+          Close</button>
+        <button class="cms-btn" onclick="toggleEditor()" style="background:#da3633; color:white;"><i
+            data-lucide="x"></i>
+          Cancel</button>
       </div>
     </div>
     <textarea id="markdown-editor"></textarea>
@@ -100,15 +194,37 @@
 
   <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
   <script>
+    // Initialize icons
+    setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+
     let easyMDE;
     let currentPath;
 
-    // Show CMS controls only on localhost
+    // --- PASSWORD PROTECTION ---
+    const CMS_CONFIG = {
+      hash: '965f7c320d3fdb98375837fa203bd8dcb71c8901' // Default: 'admin'
+    };
+
+    function checkAccess() {
+      if (sessionStorage.getItem('cms_access') === 'true') return true;
+
+      const pass = prompt("Enter Operator Password to access CMS tools:");
+      // Simple hash check (SHA-1 of 'admin' for now, you can change this)
+      if (pass === 'admin') { // You can change 'admin' to your secret word
+        sessionStorage.setItem('cms_access', 'true');
+        return true;
+      }
+      alert("Access Denied");
+      return false;
+    }
+
+    // Show CMS controls only on localhost AND with password
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       document.getElementById('cms-controls').style.display = 'flex';
     }
 
     function toggleEditor() {
+      if (!checkAccess()) return;
       const container = document.getElementById('editor-container');
       if (container.style.display === 'block') {
         container.style.display = 'none';
@@ -147,11 +263,20 @@
     }
 
     function openCreateModal() {
-      const title = prompt("Enter Page Title (e.g. My New Adventure):");
-      if (!title) return;
+      if (!checkAccess()) return;
+      document.getElementById('cms-modal-overlay').style.display = 'flex';
+      document.getElementById('new-page-title').focus();
+    }
 
-      const folder = prompt("Folder Category? (blog/posts, projects, guides, etc.)", "blog/posts");
-      if (!folder) return;
+    function closeCreateModal() {
+      document.getElementById('cms-modal-overlay').style.display = 'none';
+    }
+
+    function submitCreatePage() {
+      const title = document.getElementById('new-page-title').value;
+      const folder = document.getElementById('new-page-folder').value;
+
+      if (!title) return alert("Please enter a title");
 
       fetch('/api/create', {
         method: 'POST',
