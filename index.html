@@ -13,12 +13,157 @@
 
   <!-- Custom Premium Theme -->
   <link rel="stylesheet" href="style.css">
+  <!-- Editor CSS (Local Only) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <style>
+    #cms-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: none;
+      /* Only show on localhost */
+      gap: 10px;
+    }
+
+    .cms-btn {
+      background: #58a6ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s;
+    }
+
+    .cms-btn:hover {
+      transform: scale(1.05);
+      background: #8b5cf6;
+    }
+
+    #editor-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0f1115;
+      z-index: 2000;
+      display: none;
+      padding: 20px;
+    }
+
+    .EasyMDEContainer .CodeMirror {
+      background: #161b22;
+      color: #e6edf3;
+      border: 1px solid #30363d;
+    }
+
+    .editor-toolbar {
+      background: #1f242c;
+      border: 1px solid #30363d;
+    }
+
+    .editor-toolbar button {
+      color: #8b949e !important;
+    }
+
+    .editor-toolbar button.active,
+    .editor-toolbar button:hover {
+      background: #30363d !important;
+    }
+  </style>
 </head>
 
 <body>
   <div id="app">Please wait...</div>
 
+  <!-- CMS Buttons -->
+  <div id="cms-controls">
+    <button class="cms-btn" onclick="openCreateModal()">+ New Page</button>
+    <button class="cms-btn" onclick="toggleEditor()">📝 Edit this Page</button>
+  </div>
+
+  <!-- Full Screen Editor -->
+  <div id="editor-container">
+    <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+      <h2 style="margin:0; color:white;">Editing: <span id="editing-filename"></span></h2>
+      <div>
+        <button class="cms-btn" onclick="saveChanges()" style="background:#238636">Save & Close</button>
+        <button class="cms-btn" onclick="toggleEditor()" style="background:#da3633">Cancel</button>
+      </div>
+    </div>
+    <textarea id="markdown-editor"></textarea>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
   <script>
+    let easyMDE;
+    let currentPath;
+
+    // Show CMS controls only on localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      document.getElementById('cms-controls').style.display = 'flex';
+    }
+
+    function toggleEditor() {
+      const container = document.getElementById('editor-container');
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+      } else {
+        // Get current page path from docsify
+        currentPath = window.location.hash.slice(2) || 'README';
+        if (!currentPath.endsWith('.md')) currentPath += '.md';
+
+        document.getElementById('editing-filename').innerText = currentPath;
+
+        // Fetch current content
+        fetch(currentPath)
+          .then(res => res.text())
+          .then(content => {
+            if (!easyMDE) {
+              easyMDE = new EasyMDE({
+                element: document.getElementById('markdown-editor'),
+                forceSync: true,
+                theme: "dark"
+              });
+            }
+            easyMDE.value(content);
+            container.style.display = 'block';
+          });
+      }
+    }
+
+    function saveChanges() {
+      const content = easyMDE.value();
+      fetch('/api/save', {
+        method: 'POST',
+        body: JSON.stringify({ path: currentPath, content: content })
+      }).then(() => {
+        window.location.reload();
+      });
+    }
+
+    function openCreateModal() {
+      const title = prompt("Enter Page Title (e.g. My New Adventure):");
+      if (!title) return;
+
+      const folder = prompt("Folder Category? (blog/posts, projects, guides, etc.)", "blog/posts");
+      if (!folder) return;
+
+      fetch('/api/create', {
+        method: 'POST',
+        body: JSON.stringify({ title, folder })
+      })
+        .then(res => res.json())
+        .then(data => {
+          window.location.hash = '#' + data.path;
+          window.location.reload();
+        });
+    }
+
     window.$docsify = {
       name: 'Omkar Gharat',
       nameLink: '/',
