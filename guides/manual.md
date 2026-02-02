@@ -31,7 +31,7 @@ I have built a **Local CMS** for you so you don't have to touch code to blog.
 ### 2. Editing an Existing Page
 - Navigate to the page you want to change.
 - Click the **`📝 Edit this Page`** button.
-- Write in Markdown.
+- Write comfortably. The editor uses a **Notion-like visual style** (Instant Rendering), so you don't see raw Markdown symbols—what you type is what you get.
 - Click **`Save & Close`**.
 
 ---
@@ -55,7 +55,7 @@ When you are done writing locally, you must "Push" your changes to GitHub to sho
 
 - **`/blog/posts/`**: Where your actual blog articles (.md files) live.
 - **`/guides/`**: This documentation and other helpful notes.
-- **`index.html`**: The "Heart" of the site. Contains the Docsify config and CMS UI logic.
+- **`index.html`**: The "Heart" of the site. Contains the Docsify config, Vditor editor, and CMS UI logic.
 - **`style.css`**: The "Skin" of the site. Controls the premium dark theme.
 - **`cms-server.js`**: The "Brain." It handles the Local CMS and auto-generates your sidebar.
 - **`.nojekyll`**: **CRITICAL.** Do not delete. This tells GitHub to show files that start with underscores.
@@ -63,6 +63,9 @@ When you are done writing locally, you must "Push" your changes to GitHub to sho
 ---
 
 ## 🛠 Troubleshooting
+
+### Editor looks weird or has giant icons?
+If the editor UI seems broken, try a **Hard Refresh** of the page (hold `Shift` and click the browser Refresh button) to clear old styles.
 
 ### Port Busy Error
 If you get an `EADDRINUSE` error when running `npm start`, don't worry! The server is smart and will automatically try the next available port (50172, 50173, etc.). Just check the terminal for the current link.

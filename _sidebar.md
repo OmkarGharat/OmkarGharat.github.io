@@ -3,6 +3,8 @@
   * [posts]()
     * [Introduction to My Digital Garden](/blog/posts/introduction.md)
     * [My Tech Stack](/blog/posts/tech-stack.md)
+    * [Test](/blog/posts/test.md)
 * [User Guides](/guides/)
+  * [📔 Digital Garden Operator's Manual](/guides/manual.md)
 * [Projects](/projects/)
 * [About Me](/about.md)

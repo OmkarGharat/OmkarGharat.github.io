@@ -13,9 +13,103 @@
 
   <!-- Custom Premium Theme -->
   <link rel="stylesheet" href="style.css">
-  <!-- Editor CSS (Local Only) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+  <!-- Editor CSS (Vditor) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
   <style>
+    /* Global Editor Overrides for Premium Feel */
+    .vditor {
+      border: none !important;
+      background-color: #0f1115 !important;
+      --vditor-content-theme: dark;
+    }
+
+    .vditor-toolbar {
+      background-color: #161b22 !important;
+      border-bottom: 1px solid #30363d !important;
+      padding-left: 10px !important;
+      display: flex !important;
+    }
+
+    .vditor-content {
+      background-color: #0f1115 !important;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .vditor-reset {
+      color: #e6edf3 !important;
+    }
+
+    /* SVG Icon Sizing Fix */
+    .vditor-tooltipped svg {
+      width: 16px !important;
+      height: 16px !important;
+      fill: currentColor !important;
+    }
+
+    /* Remove Underline from Headings in Editor */
+    .vditor-reset h1,
+    .vditor-reset h2 {
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+    }
+
+    /* Fix Code Block Language Selector (Hint Menu) */
+    .vditor-hint {
+      background-color: #161b22 !important;
+      border: 1px solid #30363d !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+      color: #e6edf3 !important;
+      z-index: 5000 !important;
+    }
+
+    .vditor-hint button {
+      color: #e6edf3 !important;
+      background: transparent !important;
+      /* Remove any default white bg */
+      padding: 6px 12px !important;
+      border-radius: 4px;
+    }
+
+    .vditor-hint button:hover,
+    .vditor-hint button.vditor-hint--current {
+      background-color: #58a6ff !important;
+      color: #0f1115 !important;
+    }
+
+    /* Hide the Vditor Hint Menu (abc, plantuml, etc.) completely */
+    .vditor-hint {
+      display: none !important;
+    }
+
+    /* FORCE DARK MODE ON CODE BLOCK CONTAINER ONLY */
+    .vditor-ir__block {
+      background-color: #161b22 !important;
+      border: 1px solid #30363d !important;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+
+    /* Make inner elements transparent to avoid double-boxing / ghosting */
+    .vditor-ir__block pre,
+    .vditor-ir__block code,
+    .vditor-ir__node,
+    .vditor-ir__node--preview {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Ensure text color is correct */
+    .vditor-ir__block,
+    .vditor-ir__block * {
+      color: #e6edf3 !important;
+    }
+
+    /* Hide the duplicate preview block that creates the second white box */
+    .vditor-ir__node--preview {
+      display: none !important;
+    }
+
     #cms-controls {
       position: fixed;
       bottom: 20px;
@@ -192,7 +286,9 @@
     <textarea id="markdown-editor"></textarea>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
   <script>
     // Initialize icons
     setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
@@ -219,9 +315,13 @@
     }
 
     // Show CMS controls only on localhost AND with password
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      document.getElementById('cms-controls').style.display = 'flex';
-    }
+    window.addEventListener('load', () => {
+      console.log("Checking CMS Access for: " + window.location.hostname);
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const controls = document.getElementById('cms-controls');
+        if (controls) controls.style.display = 'flex';
+      }
+    });
 
     function toggleEditor() {
       if (!checkAccess()) return;
@@ -239,21 +339,58 @@
         fetch(currentPath)
           .then(res => res.text())
           .then(content => {
-            if (!easyMDE) {
-              easyMDE = new EasyMDE({
-                element: document.getElementById('markdown-editor'),
-                forceSync: true,
-                theme: "dark"
+            // Vditor Initialization Logic
+            const editorEl = document.getElementById('markdown-editor');
+
+            if (!window.vditorInstance) {
+              // Hide original textarea
+              editorEl.style.display = 'none';
+
+              // Create container for Vditor
+              const vditorDiv = document.createElement('div');
+              vditorDiv.id = 'vditor-editor';
+              editorEl.parentNode.appendChild(vditorDiv);
+
+              window.vditorInstance = new Vditor('vditor-editor', {
+                lang: 'en_US', // Fixes Chinese Tooltips
+                cdn: 'https://cdn.jsdelivr.net/npm/vditor', // Explicit CDN
+                height: window.innerHeight - 100,
+                mode: 'ir', // Instant Rendering (Affine/Notion style)
+                theme: 'dark',
+                value: content,
+                cache: {
+                  enable: false
+                },
+                toolbar: [
+                  'headings', 'bold', 'italic', 'strike', 'link', '|',
+                  'list', 'ordered-list', 'check', '|',
+                  'quote', 'line', 'code', 'inline-code', '|',
+                  'undo', 'redo', 'fullscreen', 'edit-mode'
+                ],
+                preview: {
+                  theme: {
+                    current: 'dark',
+                    path: 'https://unpkg.com/vditor/dist/css/content-theme'
+                  }
+                },
+                after: () => {
+                  // Ensure premium dark background matches
+                  const contentEl = vditorDiv.querySelector('.vditor-content');
+                  if (contentEl) contentEl.style.backgroundColor = '#0f1115';
+                }
               });
+            } else {
+              // Update existing instance
+              window.vditorInstance.setValue(content);
             }
-            easyMDE.value(content);
+
             container.style.display = 'block';
           });
       }
     }
 
     function saveChanges() {
-      const content = easyMDE.value();
+      const content = window.vditorInstance.getValue();
       fetch('/api/save', {
         method: 'POST',
         body: JSON.stringify({ path: currentPath, content: content })
