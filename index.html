@@ -81,33 +81,56 @@
       display: none !important;
     }
 
-    /* FORCE DARK MODE ON CODE BLOCK CONTAINER ONLY */
-    .vditor-ir__block {
-      background-color: #161b22 !important;
+    /* --- VDITOR CODE BLOCK RESET (FINAL FIX) --- */
+
+    /* 1. The Container: Defines the dark box */
+    .vditor-ir__node[data-type="code-block"] {
+      background-color: #1f242c !important;
       border: 1px solid #30363d !important;
-      border-radius: 6px;
-      margin: 10px 0;
+      border-radius: 6px !important;
+      margin: 10px 0 !important;
+      padding: 12px 14px !important;
+      display: block !important;
     }
 
-    /* Make inner elements transparent to avoid double-boxing / ghosting */
-    .vditor-ir__block pre,
-    .vditor-ir__block code,
-    .vditor-ir__node,
-    .vditor-ir__node--preview {
+    /* 2. Hide the Duplicate Preview completely */
+    .vditor-ir__preview,
+    .vditor-ir__node--preview .vditor-ir__preview {
+      display: none !important;
+    }
+
+    /* 3. FORCE VISIBILITY FOR EVERYTHING ELSE */
+    /* This includes the markers (```) AND the text content (pre/code) */
+    .vditor-ir__marker--pre,
+    .vditor-ir__node--preview .vditor-ir__marker--pre,
+    .vditor-ir__node[data-type="code-block"] pre,
+    .vditor-ir__node--preview pre,
+    .vditor-ir__node[data-type="code-block"] code,
+    .vditor-ir__node--preview code {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* 4. Formatting: Inner text styling */
+    .vditor-ir__node[data-type="code-block"] pre,
+    .vditor-ir__node[data-type="code-block"] code {
       background-color: transparent !important;
       border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
       box-shadow: none !important;
-    }
-
-    /* Ensure text color is correct */
-    .vditor-ir__block,
-    .vditor-ir__block * {
+      font-family: 'JetBrains Mono', monospace !important;
       color: #e6edf3 !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+      white-space: pre-wrap !important;
     }
 
-    /* Hide the duplicate preview block that creates the second white box */
-    .vditor-ir__node--preview {
-      display: none !important;
+    /* 5. Styling for the backticks/language marker */
+    .vditor-ir__marker {
+      color: #6e7681 !important;
+      font-family: 'JetBrains Mono', monospace !important;
     }
 
     #cms-controls {
@@ -275,6 +298,11 @@
       <h2 style="margin:0; color:white; font-family: 'Outfit', sans-serif;">Editing: <span id="editing-filename"
           style="color:#58a6ff; font-weight: 400; font-size: 1.2rem;"></span></h2>
       <div style="display:flex; gap:10px;">
+        <!-- Upload MD Button -->
+        <input type="file" id="md-file-upload" accept=".md" style="display:none" onchange="handleFileUpload(this)">
+        <button class="cms-btn" onclick="triggerFileUpload()" style="background:#1f6feb; color:white;"><i
+            data-lucide="upload"></i> Upload MD</button>
+
         <button class="cms-btn" onclick="saveChanges()" style="background:#238636; color:white;"><i
             data-lucide="check"></i> Save &
           Close</button>
@@ -424,6 +452,30 @@
           window.location.hash = '#' + data.path;
           window.location.reload();
         });
+    }
+
+    // --- UPLOAD MD FILE LOGIC ---
+    function triggerFileUpload() {
+      document.getElementById('md-file-upload').click();
+    }
+
+    function handleFileUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          if (window.vditorInstance) {
+            window.vditorInstance.setValue(e.target.result);
+            // Re-render icons after new content load just in case
+            setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+          }
+        };
+
+        reader.readAsText(file);
+        // Reset input so same file can be selected again if needed
+        input.value = '';
+      }
     }
 
     window.$docsify = {
