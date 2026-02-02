@@ -1,0 +1,48 @@
+backend:
+  name: github
+  repo: OmkarGharat/OmkarGharat.github.io
+  branch: main
+  # Note: For production use without Netlify, you might need a custom OAuth server.
+  # See: https://decapcms.org/docs/github-backend/
+
+media_folder: "assets/images"
+public_folder: "/assets/images"
+
+# Local testing configuration (Optional: requires `npx decap-server`)
+local_backend: true
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "blog/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Description/Summary", name: "description", widget: "text", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "projects"
+    label: "Projects"
+    folder: "projects"
+    create: true
+    editor:
+      preview: false
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "guides"
+    label: "Guides"
+    folder: "guides"
+    create: true
+    editor:
+      preview: false
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
