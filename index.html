@@ -46,9 +46,13 @@
       fill: currentColor !important;
     }
 
-    /* Remove Underline from Headings in Editor */
+    /* Remove Underline from Headings - GLOBAL FIX */
     .vditor-reset h1,
-    .vditor-reset h2 {
+    .vditor-reset h2,
+    .markdown-section h1,
+    .markdown-section h2,
+    h1,
+    h2 {
       border-bottom: none !important;
       padding-bottom: 0 !important;
     }
@@ -358,14 +362,26 @@
         container.style.display = 'none';
       } else {
         // Get current page path from docsify
-        currentPath = window.location.hash.slice(2) || 'README';
+        // 1. Get hash (e.g. #/blog/posts/intro?id=title)
+        let hash = window.location.hash.slice(2);
+
+        // 2. Remove query params (e.g. ?id=...)
+        hash = hash.split('?')[0];
+
+        // 3. Default to README if empty
+        currentPath = hash || 'README';
+
+        // 4. Add extension if missing
         if (!currentPath.endsWith('.md')) currentPath += '.md';
 
         document.getElementById('editing-filename').innerText = currentPath;
 
         // Fetch current content
         fetch(currentPath)
-          .then(res => res.text())
+          .then(res => {
+            if (!res.ok) throw new Error("File not found");
+            return res.text();
+          })
           .then(content => {
             // Vditor Initialization Logic
             const editorEl = document.getElementById('markdown-editor');

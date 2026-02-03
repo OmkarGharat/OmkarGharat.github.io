@@ -12,8 +12,6 @@ This wiki-style blog documents my learning journey, technical notes, and project
 
 ## Latest Updates
 
-\#\# This is heading 2
-
 * **[Feb 2026]**: Added new [Introduction](/blog/posts/introduction) post.
 * **[Feb 2026]**: Updated the [Tech Stack](/blog/posts/tech-stack).
 

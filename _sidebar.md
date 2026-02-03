@@ -1,4 +1,7 @@
 * [Home](/) 
+* [admin]()
+* [assets]()
+  * [images]()
 * [Blog Posts](/blog/)
   * [posts]()
     * [Introduction to My Digital Garden](/blog/posts/introduction.md)

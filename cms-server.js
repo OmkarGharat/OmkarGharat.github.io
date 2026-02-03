@@ -104,14 +104,32 @@ const server = http.createServer((req, res) => {
 
     // Static File Serving
     let filePath = '.' + req.url;
-    if (filePath === './') filePath = './index.html';
-    filePath = filePath.split('?')[0];
+    // Strip query strings
+    const urlPath = req.url.split('?')[0];
+    filePath = '.' + urlPath;
 
-    // Auto-append .md if it's a docsify route
+    // Handle Directory Indexing & Trailing Slahes
+    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
+        // If directory access without trailing slash, redirect!
+        // This fixes loading relative assets like config.yml
+        if (!urlPath.endsWith('/')) {
+            res.writeHead(301, { 'Location': urlPath + '/' });
+            res.end();
+            return;
+        }
+
+        if (fs.existsSync(path.join(filePath, 'index.html'))) {
+            filePath = path.join(filePath, 'index.html');
+        } else if (fs.existsSync(path.join(filePath, 'README.md'))) {
+            filePath = path.join(filePath, 'README.md');
+        }
+    }
+
+    // Auto-append .md if it's a docsify route (and file didn't exist)
     if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.md')) {
         filePath += '.md';
-    } else if (!fs.existsSync(filePath) && fs.existsSync(filePath + '/README.md')) {
-        filePath += '/README.md';
+    } else if (filePath === './') {
+        filePath = './index.html';
     }
 
     const extname = path.extname(filePath);
@@ -123,6 +141,8 @@ const server = http.createServer((req, res) => {
         case '.md': contentType = 'text/markdown'; break;
         case '.png': contentType = 'image/png'; break;
         case '.jpg': contentType = 'image/jpg'; break;
+        case '.yml': contentType = 'text/yaml'; break; /* Add YAML support */
+        case '.yaml': contentType = 'text/yaml'; break;
     }
 
     fs.readFile(filePath, (error, content) => {

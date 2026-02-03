@@ -1,3 +1,9 @@
+---
+title: Introduction to My Digital Garden
+date: 2026-02-01
+description: The start of my personal blogging site using Docsify.
+---
+
 # Introduction to My Digital Garden
 
 **Date:** Feb 1, 2026

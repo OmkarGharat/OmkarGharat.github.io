@@ -133,12 +133,13 @@ section.cover .cover-main>p:last-child a:hover {
     font-family: var(--base-font);
     color: var(--heading-color);
     font-weight: 700;
-    margin-top: 1.5em;
+    margin-top: 1.0em;
 }
 
 .markdown-section h1 {
     font-size: 3rem;
-    margin-bottom: 1rem;
+    margin-top: 0.2em !important;
+    margin-bottom: 0.5rem;
     background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -231,4 +232,26 @@ section.cover .cover-main>p:last-child a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #58a6ff;
+}
+
+/* Remove underline/decoration from heading anchors on hover */
+.markdown-section h1 a,
+.markdown-section h2 a,
+.markdown-section h3 a,
+.markdown-section h4 a,
+.markdown-section h5 a,
+.markdown-section h6 a {
+    text-decoration: none !important;
+    border: none !important;
+}
+
+.markdown-section h1 a:hover,
+.markdown-section h2 a:hover,
+.markdown-section h3 a:hover,
+.markdown-section h4 a:hover,
+.markdown-section h5 a:hover,
+.markdown-section h6 a:hover {
+    text-decoration: none !important;
+    border: none !important;
+    background: transparent !important;
 }

@@ -1,3 +1,9 @@
+---
+title: My Tech Stack
+date: 2026-02-02
+description: A list of tools and technologies I use to build things.
+---
+
 # My Tech Stack
 
 Here is a list of tools and technologies I use to build things.

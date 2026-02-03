@@ -1,3 +1,9 @@
+---
+title: API Testing Resources
+date: 2026-02-03
+description: Useful free resources for API testing and JSON schema validation.
+---
+
 # API Testing Resources
 
 ## JSON Storage online free
