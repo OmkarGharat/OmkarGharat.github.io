@@ -577,7 +577,8 @@
       themeColor: '#58a6ff',
       /* Fix Sidebar Flicker: Stop checking subfolders for _sidebar.md */
       alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
+        '/.*/_sidebar.md': '/_sidebar.md',
+        '/.*/_navbar.md': '/_navbar.md'
       },
       loadSidebar: true,
       loadNavbar: true,
@@ -621,14 +622,61 @@
             return content.replace(/^---\n[\s\S]*?\n---\n/, '');
           });
 
-          // MANUAL LOGO INJECTION (Fix for missing .app-name)
+          // MANUAL LOGO & TOGGLE INJECTION
           hook.doneEach(function () {
             const sidebar = document.querySelector('.sidebar');
+
+            // 1. Inject Logo
             if (sidebar && !sidebar.querySelector('.app-name')) {
               const h1 = document.createElement('h1');
               h1.className = 'app-name';
-              h1.innerHTML = '<a class="app-name-link" href="/"><img src="assets/images/logo.png" alt="OG Logo"></a>';
+              const currentTheme = localStorage.getItem('theme') || 'dark';
+              const logoSrc = currentTheme === 'light' ? 'assets/images/logo_light.png' : 'assets/images/logo_dark.png';
+              h1.innerHTML = `<a class="app-name-link" href="/"><img src="${logoSrc}" alt="OG Logo"></a>`;
               sidebar.insertBefore(h1, sidebar.firstChild);
+            }
+
+            // 2. Inject Theme Dropdown (Sidebar Footer)
+            if (sidebar && !sidebar.querySelector('.sidebar-footer')) {
+              const footer = document.createElement('div');
+              footer.className = 'sidebar-footer';
+              footer.style.cssText = `
+                    padding: 20px; 
+                    margin-top: auto; /* Push to bottom if sidebar flex */
+                    border-top: 1px solid var(--sidebar-border);
+                 `;
+
+              const label = document.createElement('div');
+              label.textContent = "Theme";
+              label.style.fontWeight = "600";
+              label.style.marginBottom = "8px";
+              label.style.fontSize = "14px";
+
+              const select = document.createElement('select');
+              select.style.cssText = `
+                    width: 100%; padding: 8px; border-radius: 6px;
+                    background: var(--code-bg); color: var(--text-color);
+                    border: 1px solid var(--sidebar-border);
+                    outline: none; cursor: pointer;
+                 `;
+
+              const optDark = document.createElement('option');
+              optDark.value = 'dark'; optDark.innerText = '🌙 Dark Mode';
+              const optLight = document.createElement('option');
+              optLight.value = 'light'; optLight.innerText = '☀️ Light Mode';
+
+              select.appendChild(optDark);
+              select.appendChild(optLight);
+
+              // Set initial value
+              const saved = localStorage.getItem('theme') || 'dark';
+              select.value = saved;
+
+              select.onchange = (e) => setTheme(e.target.value);
+
+              footer.appendChild(label);
+              footer.appendChild(select);
+              sidebar.appendChild(footer);
             }
           });
         }
@@ -638,6 +686,35 @@
 
   <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+
+  <!-- Theme Logic Handlers -->
+  <script>
+    // Global Theme Setter functions
+    const themeLink = document.querySelector('link[href*="docsify/themes"]');
+
+    function setTheme(mode) {
+      if (mode === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeLink.href = 'https://cdn.jsdelivr.net/npm/docsify/themes/vue.css';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeLink.href = 'https://cdn.jsdelivr.net/npm/docsify/themes/dark.css';
+      }
+      localStorage.setItem('theme', mode);
+
+      // Update Logo dynamically
+      const logoImg = document.querySelector('.app-name-link img');
+      if (logoImg) {
+        logoImg.src = mode === 'light' ? 'assets/images/logo_light.png' : 'assets/images/logo_dark.png';
+      }
+    }
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') setTheme('light');
+
+
+  </script>
 
   <!-- Plugins -->
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>

@@ -25,6 +25,85 @@
     --theme-color: #58a6ff;
 }
 
+/* Light Mode Overrides */
+html[data-theme="light"] {
+    --bg-color: #ffffff !important;
+    --sidebar-bg: #f6f8fa !important;
+    --sidebar-border: #d0d7de !important;
+    --text-color: #24292f !important;
+    --heading-color: #1f2328 !important;
+    --accent-color: #0969da !important;
+    --accent-gradient: linear-gradient(135deg, #0969da 0%, #8b5cf6 100%) !important;
+    --link-color: #0969da !important;
+    --code-bg: #f6f8fa !important;
+    /* Light code block */
+
+    /* Glassmorphism Light */
+    --glass-bg: rgba(255, 255, 255, 0.7) !important;
+    --glass-border: rgba(0, 0, 0, 0.1) !important;
+    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-theme="light"] body,
+html[data-theme="light"] section.cover,
+html[data-theme="light"] .markdown-section {
+    background-color: #ffffff !important;
+    color: #24292f !important;
+    background: #ffffff !important;
+    /* Override potential gradients */
+}
+
+/* Light Mode Content Fixes */
+html[data-theme="light"] blockquote {
+    color: #24292f !important;
+    background: #f6f8fa !important;
+    /* Light Grey BG */
+    border-left-color: #0969da !important;
+    border-right-color: transparent !important;
+}
+
+/* Coverpage Blockquote (Subtitle) - Transparent */
+html[data-theme="light"] section.cover blockquote {
+    background: transparent !important;
+    border: none !important;
+    padding-left: 0 !important;
+    /* Remove indentation if any */
+}
+
+html[data-theme="light"] blockquote p,
+html[data-theme="light"] section.cover p,
+html[data-theme="light"] section.cover span,
+html[data-theme="light"] section.cover div,
+html[data-theme="light"] .cover-main,
+html[data-theme="light"] .cover-main p,
+html[data-theme="light"] .cover-main h1,
+html[data-theme="light"] .cover-main h2,
+html[data-theme="light"] .cover-main h3,
+html[data-theme="light"] .cover-main span {
+    color: #24292f !important;
+    text-shadow: none !important;
+}
+
+/* Fix Markdown Section Text (User Identified) */
+html[data-theme="light"] .markdown-section p,
+html[data-theme="light"] .markdown-section h1,
+html[data-theme="light"] .markdown-section h2,
+html[data-theme="light"] .markdown-section h3,
+html[data-theme="light"] .markdown-section h4,
+html[data-theme="light"] .markdown-section ul,
+html[data-theme="light"] .markdown-section ol,
+html[data-theme="light"] .markdown-section li,
+html[data-theme="light"] .markdown-section table {
+    color: #24292f !important;
+}
+
+/* Smooth Transition for Theme Switch */
+body,
+.sidebar,
+.content {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 body {
     font-family: var(--base-font);
     background-color: var(--bg-color);
@@ -38,9 +117,20 @@ body {
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     border-right: 1px solid var(--sidebar-border);
+    width: 300px;
+    position: fixed;
+    z-index: 10;
+    margin: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    /* FLEX for footer */
+    flex-direction: column;
     padding-top: 60px;
     /* Make room for the Toggle Button */
-    width: 300px !important;
     transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
     /* Smooth Slide */
     /* Performance Optimizations */
@@ -94,6 +184,76 @@ body {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     overflow-y: auto;
+}
+
+/* Sidebar Animation Fixes */
+.sidebar-nav li>ul {
+    display: block !important;
+    max-height: 800px;
+    opacity: 1;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+}
+
+.sidebar-nav li.collapse>ul {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Sidebar Arrow - Sleek Chevron Style (Folders Only) */
+.sidebar-nav li.folder::before {
+    content: '' !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    width: 6px !important;
+    height: 6px !important;
+
+    /* Create Chevron Shape */
+    border: none !important;
+    border-right: 2px solid var(--text-color) !important;
+    border-bottom: 2px solid var(--text-color) !important;
+    background: transparent !important;
+
+    /* Spacing */
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+
+    /* Initial Rotation (Pointing Right) */
+    transform: rotate(-45deg) translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Rotated State (Pointing Down) */
+.sidebar-nav li.folder.open::before {
+    transform: rotate(45deg) translateY(-2px);
+}
+
+/* Specific User Adjustment for Root Folders */
+.sidebar-nav ul:not(.app-sub-sidebar)>li:not(.file)::before {
+    /* position: relative !important; */
+    top: 16px !important;
+}
+
+/* Ensure Text doesn't wrap weirdly */
+.sidebar-nav li a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sidebar-nav li {
+    position: relative;
+    /* Context for absolute arrow */
+}
+
+/* Scrollbar Styling */
+/* Hide Scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
 }
 
 /* Target ALL scrollbars in the app */
@@ -387,4 +547,15 @@ section.cover .cover-main>p:last-child a:hover {
         /* Give it background to read over content */
         padding-bottom: 10px;
     }
+}
+
+/* Navbar - Force Flow Layout (Not Fixed) */
+.app-nav {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    margin: 20px 30px 0 0 !important;
+    text-align: right !important;
+    background: transparent !important;
+    width: auto !important;
 }

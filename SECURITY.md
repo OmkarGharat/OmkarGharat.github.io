@@ -4,11 +4,19 @@
 
 Please use the latest version of the website code.
 
-## CMS Security
+## CMS Security Layers
 
-- **Authentication**: Access to the CMS (`/admin`) is restricted to **Invite Only** members via Netlify Identity.
-- **Backend**: We use Git Gateway to securely interact with the GitHub API.
-- **Local Development**: The `cms-server.js` script is intended for **LOCAL DEVELOPMENT ONLY**. Do not deploy this script to a public server as it allows unauthenticated file system access.
+1.  **Visual Lock Screen**: The `/admin` route is protected by a client-side PIN (Default: `OmkarAdmin`) to prevent casual access.
+2.  **Netlify Identity**: Actual write access to the repository via the CMS requires **OAuth Authentication**.
+    *   **Configuration**: Ensure "Registration" is set to "Invite Only" in Netlify Site Settings.
+3.  **Local Development Server**:
+    *   The `cms-server.js` file handles local file operations (`npm start`).
+    *   **Production Safety**: This script **does not run** on Netlify/GitHub Pages. It is treated as a static static file. Even if present in the repository, it effectively does nothing in production.
+
+## Maintainer Access
+
+As this project is maintained by a single developer, **Branch Protection** rules are optional but recommended for preventing accidental force pushes.
+- **Critical**: Enable **2FA (Two-Factor Authentication)** on both GitHub and Netlify accounts.
 
 ## Reporting a Vulnerability
 
