@@ -269,6 +269,21 @@
 <body>
   <div id="app">Please wait...</div>
 
+  <!-- Custom Mobile Toggle (Replaces Hamburger) -->
+  <div id="mobile-nav-brand">Omkar Gharat</div>
+  <script>
+    // Toggle sidebar when clicking the brand name
+    document.getElementById('mobile-nav-brand').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (document.querySelector('.sidebar-toggle')) {
+        document.querySelector('.sidebar-toggle').click();
+      } else {
+        // Fallback if Docsify hasn't rendered toggle yet
+        document.body.classList.toggle('close');
+      }
+    });
+  </script>
+
   <!-- Custom Modal -->
   <div id="cms-modal-overlay">
     <div id="cms-modal">

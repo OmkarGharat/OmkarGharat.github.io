@@ -278,22 +278,42 @@ section.cover .cover-main>p:last-child a:hover {
     display: none !important;
 }
 
-/* Mobile Sidebar Toggle Button Styling */
+/* Mobile Sidebar Toggle Button - HIDDEN (Replaced by Text) */
 .sidebar-toggle {
-    background-color: transparent !important;
-    top: 10px !important;
-    left: 10px !important;
-    bottom: auto !important;
-    padding: 10px;
-    border-radius: 8px;
-    width: auto !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    left: -9999px !important;
 }
 
-/* Fix Hamburger Icon Color */
-.sidebar-toggle span {
-    background-color: var(--text-color) !important;
+/* Custom Text Toggle "Omkar Gharat" */
+#mobile-nav-brand {
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    z-index: 50;
+    /* Below Sidebar (z-index 60 usually) but above content */
+    font-family: var(--base-font);
+    font-weight: 800;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity 0.3s;
 }
 
-body.close .sidebar-toggle {
-    width: auto !important;
+/* Hide custom toggle when sidebar is open on Desktop to avoid duplicate titles */
+/* (Optional: user might want it always visible, but let's try this first) */
+body:not(.close) #mobile-nav-brand {
+    /* If sidebar is open on desktop, we usually have the sidebar title. 
+       But strictly speaking, on Mobile, Docsify doesn't use '.close' class consistently for state.
+       Restricting this to media query is safer. */
+}
+
+@media screen and (max-width: 768px) {
+    #mobile-nav-brand {
+        display: block;
+    }
 }
