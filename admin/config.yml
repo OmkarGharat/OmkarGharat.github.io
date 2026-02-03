@@ -1,9 +1,7 @@
 backend:
-  name: github
-  repo: OmkarGharat/OmkarGharat.github.io
+  name: git-gateway
   branch: main
-  # Note: For production use without Netlify, you might need a custom OAuth server.
-  # See: https://decapcms.org/docs/github-backend/
+  # git-gateway allows Netlify Identity to handle the Auth directly.
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
