@@ -37,14 +37,26 @@ body {
 .sidebar {
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
-    padding-top: 20px;
+    border-right: 1px solid var(--sidebar-border);
+    padding-top: 60px;
+    /* Increased to make room for the Toggle Button */
     width: 300px !important;
-    transition: none !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+    /* Smooth Slide */
     /* Performance Optimizations */
-    contain: content;
+    /* contain: content;  <-- REMOVED: Caused sidebar to be cut off */
     transform: translateZ(0);
     will-change: transform;
-    min-height: 100vh;
+    height: 100vh !important;
+    /* Force full height */
+    position: fixed !important;
+    /* Pin to left */
+    overflow-y: auto !important;
+    /* Scroll internal content */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 40;
 }
 
 .sidebar-nav {
@@ -73,9 +85,18 @@ body {
     text-decoration: none;
 }
 
-/* Prevent scrollbar layout shift */
+/* Hide Scrollbar but allow scrolling */
 html {
-    overflow-y: scroll;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+    overflow-y: auto;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
 }
 
 .sidebar-nav ul li.active>a {
@@ -112,6 +133,7 @@ html {
 section.cover {
     background: linear-gradient(to bottom right, #0f1115, #161b22) !important;
     color: var(--text-color) !important;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 section.cover h1 {
@@ -213,7 +235,12 @@ section.cover .cover-main>p:last-child a:hover {
 }
 
 /* Search Box */
+/* Search Box */
 .sidebar .search {
+    margin-top: 15px !important;
+    margin-left: 54px !important;
+    /* Make room for the icon on the left */
+    margin-right: 15px !important;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--sidebar-border);
 }
@@ -286,34 +313,48 @@ section.cover .cover-main>p:last-child a:hover {
     left: -9999px !important;
 }
 
-/* Custom Text Toggle "Omkar Gharat" */
+/* Custom Icon Toggle */
 #mobile-nav-brand {
     position: fixed;
     top: 15px;
     left: 20px;
-    z-index: 50;
-    /* Below Sidebar (z-index 60 usually) but above content */
-    font-family: var(--base-font);
-    font-weight: 800;
-    font-size: 1.5rem;
+    z-index: 100 !important;
+    /* Always ON TOP of sidebar */
     cursor: pointer;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: opacity 0.3s;
+    color: var(--text-color);
+    /* Icon color */
+    background: transparent;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Hide custom toggle when sidebar is open on Desktop to avoid duplicate titles */
-/* (Optional: user might want it always visible, but let's try this first) */
-body:not(.close) #mobile-nav-brand {
-    /* If sidebar is open on desktop, we usually have the sidebar title. 
-       But strictly speaking, on Mobile, Docsify doesn't use '.close' class consistently for state.
-       Restricting this to media query is safer. */
+#mobile-nav-brand:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--accent-color);
+}
+
+/* Fix Coverpage Alignment on Desktop when Sidebar is Open */
+@media screen and (min-width: 769px) {
+
+    /* Move Coverpage when Sidebar is Open (body does NOT have .close) */
+    body:not(.close) section.cover {
+        margin-left: 300px !important;
+        width: calc(100% - 300px) !important;
+    }
 }
 
 @media screen and (max-width: 768px) {
     #mobile-nav-brand {
         display: block;
+        /* Ensure it's always visible on mobile to allow opening/closing */
+        width: 100%;
+        /* Make touch target wider if needed */
+        background-color: var(--bg-color);
+        /* Give it background to read over content */
+        padding-bottom: 10px;
     }
 }

@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 let PORT = 50171;
-const IGNORE = ['.git', 'node_modules', '_sidebar.md', '_navbar.md', '_coverpage.md', 'package.json', 'package-lock.json', '.gitignore', 'cms-server.js', 'gen-sidebar.js', '.nojekyll'];
+const IGNORE = ['.git', 'node_modules', '_sidebar.md', '_navbar.md', '_coverpage.md', 'package.json', 'package-lock.json', 'yarn.lock', '.gitignore', 'cms-server.js', 'gen-sidebar.js', '.nojekyll', 'admin', 'assets', 'style.css'];
 
 // --- SIDEBAR GENERATOR LOGIC ---
 function getTitle(filePath, defaultValue) {
@@ -39,6 +39,13 @@ function generateSidebar(dir, level = 0) {
         const indent = '  '.repeat(level);
 
         if (item.isDirectory()) {
+            if (item.name === 'posts') {
+                // Flatten 'posts' folder: Skip adding the folder item, 
+                // but regenerate children at the CURRENT level (so they appear as siblings of 'posts' parent)
+                sidebar += generateSidebar(fullPath, level);
+                continue;
+            }
+
             const readmePath = path.join(fullPath, 'README.md');
             const hasReadme = fs.existsSync(readmePath);
             const title = hasReadme ? getTitle(readmePath, item.name) : item.name;
