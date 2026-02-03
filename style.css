@@ -33,10 +33,18 @@ body {
 }
 
 /* Sidebar */
+/* Sidebar - Fixed Width & GPU Layer to prevent Flicker */
 .sidebar {
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     padding-top: 20px;
+    width: 300px !important;
+    transition: none !important;
+    /* Performance Optimizations */
+    contain: content;
+    transform: translateZ(0);
+    will-change: transform;
+    min-height: 100vh;
 }
 
 .sidebar-nav {
@@ -49,12 +57,14 @@ body {
 
 .sidebar-nav ul li a {
     font-size: 15px;
-    /* Slightly larger text */
     color: #8b949e;
-    transition: all 0.2s ease;
+    transition: all 0s linear;
+    /* Remove transition to stop animation flicker */
     border-radius: 6px;
     padding: 8px 12px;
     margin: 0 10px;
+    display: block;
+    white-space: nowrap;
 }
 
 .sidebar-nav ul li a:hover {
@@ -63,10 +73,17 @@ body {
     text-decoration: none;
 }
 
+/* Prevent scrollbar layout shift */
+html {
+    overflow-y: scroll;
+}
+
 .sidebar-nav ul li.active>a {
     background: var(--accent-gradient);
     color: white;
-    font-weight: 600;
+    font-weight: normal !important;
+    /* STRICTLY prevent bold change */
+    text-shadow: none !important;
     box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
 }
 
@@ -254,4 +271,9 @@ section.cover .cover-main>p:last-child a:hover {
     text-decoration: none !important;
     border: none !important;
     background: transparent !important;
+}
+
+/* Force hide the sub-sidebar (TOC headers) in sidebar */
+.app-sub-sidebar {
+    display: none !important;
 }

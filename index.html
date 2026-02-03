@@ -501,11 +501,15 @@
       nameLink: '/',
       repo: '',
       themeColor: '#58a6ff',
+      /* Fix Sidebar Flicker: Stop checking subfolders for _sidebar.md */
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
       loadSidebar: true,
       loadNavbar: true,
       coverpage: true,
       auto2top: true,
-      subMaxLevel: 3,
+      subMaxLevel: 0, /* Disabled TOC in sidebar */
       sidebarDisplayLevel: 1,
       search: {
         maxAge: 86400000,
