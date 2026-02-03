@@ -277,3 +277,23 @@ section.cover .cover-main>p:last-child a:hover {
 .app-sub-sidebar {
     display: none !important;
 }
+
+/* Mobile Sidebar Toggle Button Styling */
+.sidebar-toggle {
+    background-color: transparent !important;
+    top: 10px !important;
+    left: 10px !important;
+    bottom: auto !important;
+    padding: 10px;
+    border-radius: 8px;
+    width: auto !important;
+}
+
+/* Fix Hamburger Icon Color */
+.sidebar-toggle span {
+    background-color: var(--text-color) !important;
+}
+
+body.close .sidebar-toggle {
+    width: auto !important;
+}
