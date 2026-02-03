@@ -4,12 +4,6 @@ This wiki-style blog documents my learning journey, technical notes, and project
 
 > "The only way to learn a new programming language is by writing programs in it." — Dennis Ritchie
 
----
-
-# This is a heading
-
-## This is heading 2
-
 ## Latest Updates
 
 * **[Feb 2026]**: Added new [Introduction](/blog/posts/introduction) post.

@@ -1,3 +1,9 @@
+/**
+ * ⚠️ SECURITY WARNING ⚠️
+ * This file is for LOCAL DEVELOPMENT ONLY.
+ * Do not deploy this script to a public server (Heroku, AWS, etc).
+ * It allows unauthenticated file system access.
+ */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -139,7 +145,7 @@ const server = http.createServer((req, res) => {
         filePath = './index.html';
     }
 
-    const extname = path.extname(filePath);
+    const extname = path.extname(filePath).toLowerCase();
     let contentType = 'text/html';
     switch (extname) {
         case '.js': contentType = 'text/javascript'; break;

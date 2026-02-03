@@ -3,16 +3,67 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Omkar's Digital Garden</title>
+  <title>Omkar's Digital Garden | Automation & Tech</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Personal knowledge base and blog of Omkar Gharat">
+  <meta name="description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation Testing, QA, Code, and Digital Gardening.">
+  <meta name="keywords"
+    content="Omkar Gharat, Digital Garden, Automation Engineer, QA, Software Testing, Playwright, Cypress, Tech Blog, Portfolio">
+  <meta name="author" content="Omkar Gharat">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://omkargharat.netlify.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://omkargharat.netlify.app/">
+  <meta property="og:title" content="Omkar's Digital Garden">
+  <meta property="og:description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation Testing, QA, and Tech.">
+  <meta property="og:image" content="https://omkargharat.netlify.app/assets/images/logo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://omkargharat.netlify.app/">
+  <meta property="twitter:title" content="Omkar's Digital Garden">
+  <meta property="twitter:description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation, QA, and Tech.">
+  <meta property="twitter:image" content="https://omkargharat.netlify.app/assets/images/logo.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Omkar Gharat",
+    "url": "https://omkargharat.netlify.app/",
+    "sameAs": [
+      "https://github.com/OmkarGharat",
+      "https://www.linkedin.com/in/omkargharat/"
+    ],
+    "jobTitle": "Automation Engineer",
+    "description": "Digital Gardener and QA Automation Enthusiast."
+  }
+  </script>
+
+  <!-- Docsify Sidebar Collapse CSS -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
 
   <!-- Base Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify/themes/dark.css">
 
   <!-- Custom Premium Theme -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* ... (Existing Editor Styles) ... */
+    /* Sidebar Collapse Icon Color Fix for Dark Mode */
+    .sidebar-nav .app-sub-sidebar li::before {
+      color: #8b949e !important;
+    }
+  </style>
+
+
   <!-- Editor CSS (Vditor) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
   <!-- Netlify Identity Widget (Required for CMS Login) -->
@@ -519,7 +570,8 @@
     }
 
     window.$docsify = {
-      name: 'Omkar Gharat',
+      name: '',
+      logo: '', // Managed manually via script below
       nameLink: '/',
       repo: '',
       themeColor: '#58a6ff',
@@ -531,8 +583,14 @@
       loadNavbar: true,
       coverpage: true,
       auto2top: true,
-      subMaxLevel: 0, /* Disabled TOC in sidebar */
-      sidebarDisplayLevel: 1,
+      subMaxLevel: 2, /* Enable TOC extraction */
+      sidebarDisplayLevel: 0, /* Start collapsed */
+
+      /* Sidebar Collapse Plugin */
+      sidebarCollapse: {
+        change: true, // default: true
+        changeLevel: 1 // default: 1
+      },
       search: {
         maxAge: 86400000,
         paths: 'auto',
@@ -562,6 +620,17 @@
             // Matches start of file --- ... --- with specific newlines
             return content.replace(/^---\n[\s\S]*?\n---\n/, '');
           });
+
+          // MANUAL LOGO INJECTION (Fix for missing .app-name)
+          hook.doneEach(function () {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar && !sidebar.querySelector('.app-name')) {
+              const h1 = document.createElement('h1');
+              h1.className = 'app-name';
+              h1.innerHTML = '<a class="app-name-link" href="/"><img src="assets/images/logo.png" alt="OG Logo"></a>';
+              sidebar.insertBefore(h1, sidebar.firstChild);
+            }
+          });
         }
       ]
     }
@@ -571,6 +640,7 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
 
   <!-- Plugins -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>

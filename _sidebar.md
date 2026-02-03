@@ -7,3 +7,4 @@
   * [📔 Digital Garden Operator's Manual](/guides/manual.md)
 * [Projects](/projects/)
 * [About Me](/about.md)
+* [Security Policy](/SECURITY.md)

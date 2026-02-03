@@ -39,7 +39,7 @@ body {
     border-right: 1px solid var(--sidebar-border);
     border-right: 1px solid var(--sidebar-border);
     padding-top: 60px;
-    /* Increased to make room for the Toggle Button */
+    /* Make room for the Toggle Button */
     width: 300px !important;
     transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
     /* Smooth Slide */
@@ -64,16 +64,19 @@ body {
 }
 
 .sidebar-nav li {
-    margin: 6px 0;
+    margin: 2px 0;
+    /* Reduced spacing */
 }
 
 .sidebar-nav ul li a {
-    font-size: 15px;
+    font-size: 14px;
+    /* Smaller font */
     color: #8b949e;
     transition: all 0s linear;
     /* Remove transition to stop animation flicker */
     border-radius: 6px;
-    padding: 8px 12px;
+    padding: 5px 12px;
+    /* Reduced vertical padding */
     margin: 0 10px;
     display: block;
     white-space: nowrap;
@@ -85,18 +88,20 @@ body {
     text-decoration: none;
 }
 
-/* Hide Scrollbar but allow scrolling */
-html {
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE 10+ */
+/* Hide ALL Scrollbars visually but allow scrolling */
+html,
+body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
     overflow-y: auto;
 }
 
-html::-webkit-scrollbar {
-    display: none;
-    /* Chrome/Safari/Webkit */
+/* Target ALL scrollbars in the app */
+::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
 }
 
 .sidebar-nav ul li.active>a {
@@ -109,17 +114,43 @@ html::-webkit-scrollbar {
 }
 
 /* App Name in Sidebar */
+/* App Name in Sidebar (Now Logo) */
+/* Force visibility of the wrapper H1 */
+.app-name {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    /* Space from top */
+    position: relative;
+    z-index: 500;
+}
+
 .app-name-link {
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
     padding: 10px;
     display: block;
     text-align: center;
-    font-size: 24px;
+}
+
+.app-name-link img {
+    max-height: 80px;
+    /* Adjust logo size */
+    min-height: 40px;
+    /* Reserve space */
+    width: auto;
+    display: block;
+    margin: 0 auto;
+    /* Center alignment */
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    /* Premium shadow */
+    transition: transform 0.3s ease;
+}
+
+.app-name-link img:hover {
+    transform: scale(1.05);
+    /* Subtle zoom effect */
 }
 
 /* Main Content */
@@ -234,7 +265,6 @@ section.cover .cover-main>p:last-child a:hover {
     color: #c9d1d9;
 }
 
-/* Search Box */
 /* Search Box */
 .sidebar .search {
     margin-top: 15px !important;
