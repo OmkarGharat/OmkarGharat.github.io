@@ -5,6 +5,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager | Omkar Gharat</title>
+    <script>
+        // === LOGIN DEBUGGER ===
+        window.addEventListener("message", (event) => {
+            console.log("%c[CMS DEBUG] Message Received:", "color: #00ff00; font-weight: bold;", event.data);
+
+            if (typeof event.data === 'string' && event.data.includes("success")) {
+                console.log("%c[CMS DEBUG] Auth Success Detected! Token should be processing now...", "color: #00ff00;");
+            }
+        }, false);
+
+        window.onerror = function (msg, url, line) {
+            console.log("%c[CMS DEBUG] Error Caught: ", "color: #ff0000; font-weight: bold;", msg, "at", url, ":", line);
+            return false;
+        };
+    </script>
 </head>
 
 <body>

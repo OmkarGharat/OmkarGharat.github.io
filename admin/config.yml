@@ -7,8 +7,8 @@ backend:
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
-# Local testing configuration (Optional: requires `npx decap-server`)
-local_backend: true
+# Local testing configuration (Disabled for Vercel)
+local_backend: false
 
 collections:
   - name: "blog"
