@@ -1,7 +1,8 @@
 backend:
-  name: git-gateway
-  branch: main
-  # git-gateway allows Netlify Identity to handle the Auth directly.
+  name: github
+  repo: OmkarGharat/OmkarGharat.github.io
+  base_url: "" # Defaults to current domain
+  auth_endpoint: api/auth # Points to our Vercel function
 
 media_folder: "assets/images"
 public_folder: "/assets/images"

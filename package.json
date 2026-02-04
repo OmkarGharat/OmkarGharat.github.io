@@ -22,5 +22,8 @@
   "homepage": "https://github.com/OmkarGharat/OmkarGharat.github.io#readme",
   "devDependencies": {
     "docsify-cli": "^4.4.4"
+  },
+  "dependencies": {
+    "simple-oauth2": "^5.1.0"
   }
 }
