@@ -1,6 +1,7 @@
 backend:
   name: github
   repo: OmkarGharat/OmkarGharat.github.io
+  base_url: https://omkar-gharat.vercel.app
   auth_endpoint: /api/auth
 
 media_folder: "assets/images"
