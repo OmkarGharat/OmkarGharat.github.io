@@ -28,33 +28,29 @@ module.exports = async (req, res) => {
     const script = `
       <script>
         (function() {
-          function recieveMessage(e) {
-            console.log("recieveMessage %o", e);
-            
-            // Send the token to the CMS window
-            window.opener.postMessage(
-              'authorization:${provider}:success:${JSON.stringify({ token, provider })}',
-              e.origin
-            );
+          // Injected values
+          const token = "${token}";
+          const provider = "${provider}";
+          
+          function receiveMessage(e) {
+            console.log("receiveMessage %o", e);
+            const content = JSON.stringify({ token: token });
+            window.opener.postMessage("authorization:" + provider + ":success:" + content, "*");
           }
 
-          window.addEventListener("message", recieveMessage, false);
+          window.addEventListener("message", receiveMessage, false);
           
-          // Use hardcoded origin or wildcard if necessary, but e.origin from handshake is safer
-          // Decap CMS initiates the popup, so we send message back
-          window.opener.postMessage(
-            'authorization:${provider}:success:${JSON.stringify({ token, provider })}',
-            '*'
-          );
+          // Immediate send
+          const content = JSON.stringify({ token: token });
+          window.opener.postMessage("authorization:" + provider + ":success:" + content, "*");
           
-          // Close the popup after a brief delay
           setTimeout(function() { window.close(); }, 1000);
         })();
       </script>
     `;
 
     res.setHeader('Content-Type', 'text/html');
-    res.end(script);
+    res.send(script);
 
   } catch (error) {
     console.error('Access Token Error', error.message);
