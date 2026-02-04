@@ -2,7 +2,7 @@ backend:
   name: github
   repo: OmkarGharat/OmkarGharat.github.io
   base_url: https://omkar-gharat.vercel.app
-  auth_endpoint: api/auth # Points to our Vercel function
+  auth_endpoint: /api/auth # Points to our Vercel function
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
