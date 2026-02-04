@@ -24,6 +24,7 @@
     "docsify-cli": "^4.4.4"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "simple-oauth2": "^5.1.0"
   }
 }
