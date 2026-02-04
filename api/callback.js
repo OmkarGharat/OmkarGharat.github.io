@@ -26,27 +26,19 @@ module.exports = async (req, res) => {
     const provider = 'github';
 
     const script = `
-      <script>
+        <script>
         (function() {
-          // Injected values
-          const token = "${token}";
-          const provider = "${provider}";
-          
-          function receiveMessage(e) {
-            console.log("receiveMessage %o", e);
-            const content = JSON.stringify({ token: token });
-            window.opener.postMessage("authorization:" + provider + ":success:" + content, "*");
-          }
-
-          window.addEventListener("message", receiveMessage, false);
-          
-          // Immediate send
-          const content = JSON.stringify({ token: token });
-          window.opener.postMessage("authorization:" + provider + ":success:" + content, "*");
-          
-          setTimeout(function() { window.close(); }, 1000);
+            const token = "` + token + `";
+            const provider = "` + provider + `";
+            const content = JSON.stringify({ token: token, provider: provider });
+            
+            if (window.opener && window.opener !== window) {
+                // Send the exact message format our Hook is looking for
+                window.opener.postMessage("authorization:" + provider + ":success:" + content, "*");
+                setTimeout(function() { window.close(); }, 1000);
+            }
         })();
-      </script>
+        </script>
     `;
 
     res.setHeader('Content-Type', 'text/html');

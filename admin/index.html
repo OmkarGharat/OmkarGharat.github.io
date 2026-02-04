@@ -6,24 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager | Omkar Gharat</title>
     <script>
-        // === LOGIN DEBUGGER ===
+        // === UNIVERSAL AUTH HOOK ===
+        // This script catches the GitHub token and manually logs the CMS in
+        // to bypass any origin or regex issues in the Decap source code.
         window.addEventListener("message", (event) => {
-            console.log("%c[CMS DEBUG] Message Received:", "color: #00ff00; font-weight: bold;", event.data);
+            console.log("[DEBUG] Received message:", event.data);
 
-            if (typeof event.data === 'string' && event.data.includes("success")) {
-                console.log("%c[CMS DEBUG] Auth Success Detected! Token should be processing now...", "color: #00ff00;");
+            if (typeof event.data === 'string' && event.data.includes("authorization:github:success")) {
+                try {
+                    const jsonStr = event.data.split("success:")[1];
+                    const data = JSON.parse(jsonStr);
+
+                    if (data.token) {
+                        console.log("%c[CMS HOOK] Token detected. Manually authenticating...", "color: #00ff00; font-weight: bold;");
+
+                        const userData = {
+                            backendName: "github",
+                            token: data.token,
+                            useAccessToken: true
+                        };
+
+                        // Save to both possible keys (Decap and legacy Netlify)
+                        localStorage.setItem("decap-cms-user", JSON.stringify(userData));
+                        localStorage.setItem("netlify-cms-user", JSON.stringify(userData));
+
+                        console.log("%c[CMS HOOK] Login Successful! Reloading dashboard...", "color: #00ff00;");
+
+                        // Small delay to ensure storage is committed
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    }
+                } catch (e) {
+                    console.error("[CMS HOOK] Failed to parse auth data:", e);
+                }
             }
         }, false);
-
-        window.onerror = function (msg, url, line) {
-            console.log("%c[CMS DEBUG] Error Caught: ", "color: #ff0000; font-weight: bold;", msg, "at", url, ":", line);
-            return false;
-        };
     </script>
 </head>
 
 <body>
-    <!-- Include the CMS script directly -->
     <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
 </body>
 
