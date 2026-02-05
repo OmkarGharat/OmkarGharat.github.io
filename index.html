@@ -320,26 +320,45 @@
 <body>
   <div id="app">Please wait...</div>
 
-  <!-- Custom Mobile Toggle (Replaces Hamburger) -->
-  <div id="mobile-nav-brand" title="Toggle Sidebar">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  </div>
   <script>
-    // Toggle sidebar when clicking the brand name
-    document.getElementById('mobile-nav-brand').addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (document.querySelector('.sidebar-toggle')) {
-        document.querySelector('.sidebar-toggle').click();
-      } else {
-        // Fallback if Docsify hasn't rendered toggle yet
-        document.body.classList.toggle('close');
+    // Create and inject hamburger menu into sidebar header
+    function createHamburgerMenu() {
+      const hamburger = document.createElement('div');
+      hamburger.id = 'mobile-nav-brand';
+      hamburger.title = 'Toggle Sidebar';
+      hamburger.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      `;
+
+      hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        console.log('[DEBUG] Hamburger clicked!');
+        if (document.querySelector('.sidebar-toggle')) {
+          console.log('[DEBUG] Clicking sidebar-toggle');
+          document.querySelector('.sidebar-toggle').click();
+        } else {
+          console.log('[DEBUG] Toggling close class on body');
+          document.body.classList.toggle('close');
+        }
+      });
+
+      return hamburger;
+    }
+
+    // Wait for Docsify to load, then inject hamburger into body
+    const injectHamburger = setInterval(() => {
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar && !document.getElementById('mobile-nav-brand')) {
+        const hamburger = createHamburgerMenu();
+        document.body.appendChild(hamburger);
+        clearInterval(injectHamburger);
       }
-    });
+    }, 100);
   </script>
 
   <!-- Custom Modal -->
@@ -618,8 +637,8 @@
         function (hook, vm) {
           hook.beforeEach(function (content) {
             // STRIP YAML FRONT MATTER BEFORE RENDERING
-            // Matches start of file --- ... --- with specific newlines
-            return content.replace(/^---\n[\s\S]*?\n---\n/, '');
+            // Flexible match for --- (data) --- with any line endings
+            return content.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---\s*[\r\n]*/, '');
           });
 
           // MANUAL LOGO & TOGGLE INJECTION

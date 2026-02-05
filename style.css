@@ -97,11 +97,15 @@ html[data-theme="light"] .markdown-section table {
     color: #24292f !important;
 }
 
-/* Smooth Transition for Theme Switch */
-body,
-.sidebar,
-.content {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+/* Transitions - Theme Switch Only */
+body[data-theme],
+.sidebar[data-theme] {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar only transition - Content must stay static */
+.sidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 body {
@@ -111,42 +115,30 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Sidebar */
-/* Sidebar - Fixed Width & GPU Layer to prevent Flicker */
 .sidebar {
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
-    border-right: 1px solid var(--sidebar-border);
     width: 300px;
-    position: fixed;
-    z-index: 10;
-    margin: 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
     box-sizing: border-box;
-    overflow-y: auto;
     display: flex;
-    /* FLEX for footer */
     flex-direction: column;
-    padding-top: 60px;
-    /* Make room for the Toggle Button */
-    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
-    /* Smooth Slide */
-    /* Performance Optimizations */
-    /* contain: content;  <-- REMOVED: Caused sidebar to be cut off */
-    transform: translateZ(0);
-    will-change: transform;
+    padding-top: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease !important;
+    transform: translateX(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     height: 100vh !important;
-    /* Force full height */
     position: fixed !important;
-    /* Pin to left */
     overflow-y: auto !important;
-    /* Scroll internal content */
     top: 0;
     left: 0;
     bottom: 0;
     z-index: 40;
+}
+
+/* Docsify Sidebar Closed State */
+body.close .sidebar {
+    transform: translateX(-300px);
 }
 
 .sidebar-nav {
@@ -178,21 +170,29 @@ body {
     text-decoration: none;
 }
 
-/* Hide ALL Scrollbars visually but allow scrolling */
 html,
 body {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    overflow-y: auto;
+    scrollbar-width: thin !important;
+    overflow-y: scroll !important;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-/* Sidebar Animation Fixes */
+/* Force hardware stability without transforms */
+#app,
+.sidebar,
+.content {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Sidebar Animation - Instant to prevent layout thrashing */
 .sidebar-nav li>ul {
     display: block !important;
-    max-height: 800px;
     opacity: 1;
-    overflow: hidden;
-    transition: all 0.4s ease-in-out;
+    overflow: visible;
+    transition: none !important;
 }
 
 .sidebar-nav li.collapse>ul {
@@ -202,30 +202,23 @@ body {
     padding: 0 !important;
 }
 
-/* Sidebar Arrow - Sleek Chevron Style (Folders Only) */
+/* Sidebar Arrow - Instant */
 .sidebar-nav li.folder::before {
     content: '' !important;
     display: inline-block !important;
     vertical-align: middle !important;
     width: 6px !important;
     height: 6px !important;
-
-    /* Create Chevron Shape */
     border: none !important;
     border-right: 2px solid var(--text-color) !important;
     border-bottom: 2px solid var(--text-color) !important;
     background: transparent !important;
-
-    /* Spacing */
     margin-left: 12px !important;
     margin-right: 12px !important;
-
-    /* Initial Rotation (Pointing Right) */
     transform: rotate(-45deg) translateY(-2px);
-    transition: transform 0.2s ease;
+    transition: none !important;
 }
 
-/* Rotated State (Pointing Down) */
 .sidebar-nav li.folder.open::before {
     transform: rotate(45deg) translateY(-2px);
 }
@@ -280,12 +273,12 @@ html::-webkit-scrollbar {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    margin: 0;
-    padding: 0;
-    margin-top: 10px;
-    /* Space from top */
+    margin: 0 !important;
+    padding: 20px 0 !important;
+    background: var(--sidebar-bg);
+    border-bottom: 1px solid var(--sidebar-border);
     position: relative;
-    z-index: 500;
+    z-index: 100;
 }
 
 .app-name-link {
@@ -296,35 +289,67 @@ html::-webkit-scrollbar {
 
 .app-name-link img {
     max-height: 80px;
-    /* Adjust logo size */
     min-height: 40px;
-    /* Reserve space */
     width: auto;
     display: block;
     margin: 0 auto;
-    /* Center alignment */
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-    /* Premium shadow */
-    transition: transform 0.3s ease;
 }
 
 .app-name-link img:hover {
-    transform: scale(1.05);
-    /* Subtle zoom effect */
+    transform: none !important;
 }
 
-/* Main Content */
+/* Main Content - Visible Area Centering (Sidebar is 300px) */
 .content {
     padding-top: 40px;
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    left: 0;
+    transform: none !important;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@media screen and (min-width: 769px) {
+
+    /* When sidebar is open (body does NOT have .close) */
+    body:not(.close) .content {
+        /* Shift the 'center' of the 900px box to the middle of the W-300 space. */
+        /* Normal center is W/2. Visible center is 300 + (W-300)/2 = 150 + W/2. */
+        /* Shift required = 150px. */
+        left: 150px !important;
+    }
+
+    body.close .content {
+        left: 0 !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .content {
+        width: 95% !important;
+        left: 0 !important;
+    }
+}
+
+/* Docsify Content expansion disabled to prevent jumping */
+body.close .content {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Docsify Content - Instant load to prevent scroll fight */
+#main {
+    opacity: 1 !important;
 }
 
 /* Coverpage Override - Force Dark Mode */
 section.cover {
     background: linear-gradient(to bottom right, #0f1115, #161b22) !important;
     color: var(--text-color) !important;
-    transition: margin-left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    /* Remove transitions that fight with scroll-to-top */
+    transition: none !important;
 }
 
 section.cover h1 {
@@ -345,7 +370,6 @@ section.cover .cover-main>p:last-child a {
     border-color: var(--accent-color);
     color: var(--accent-color);
     background: transparent;
-    transition: all 0.3s ease;
 }
 
 section.cover .cover-main>p:last-child a:hover {
@@ -503,23 +527,25 @@ section.cover .cover-main>p:last-child a:hover {
     left: -9999px !important;
 }
 
-/* Custom Icon Toggle */
+/* Custom Icon Toggle - Fixed so always visible */
 #mobile-nav-brand {
     position: fixed;
-    top: 15px;
-    left: 20px;
-    z-index: 100 !important;
-    /* Always ON TOP of sidebar */
+    top: 25px;
+    left: 15px;
+    z-index: 1000 !important;
     cursor: pointer;
     color: var(--text-color);
-    /* Icon color */
-    background: transparent;
+    background: var(--sidebar-bg);
     padding: 8px;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    border: 1px solid var(--sidebar-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 40px;
 }
 
 #mobile-nav-brand:hover {
@@ -529,23 +555,29 @@ section.cover .cover-main>p:last-child a:hover {
 
 /* Fix Coverpage Alignment on Desktop when Sidebar is Open */
 @media screen and (min-width: 769px) {
+    section.cover {
+        margin: 0 auto !important;
+        width: 100% !important;
+        left: 0 !important;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
 
-    /* Move Coverpage when Sidebar is Open (body does NOT have .close) */
     body:not(.close) section.cover {
-        margin-left: 300px !important;
-        width: calc(100% - 300px) !important;
+        left: 150px !important;
+        /* Center in visible space */
     }
 }
 
 @media screen and (max-width: 768px) {
     #mobile-nav-brand {
-        display: block;
-        /* Ensure it's always visible on mobile to allow opening/closing */
-        width: 100%;
-        /* Make touch target wider if needed */
-        background-color: var(--bg-color);
-        /* Give it background to read over content */
-        padding-bottom: 10px;
+        display: flex;
+        background-color: var(--sidebar-bg);
+        border: 1px solid var(--sidebar-border);
+    }
+
+    /* Ensure sidebar fully hides on mobile */
+    body.close .sidebar {
+        transform: translateX(-100%);
     }
 }
 
