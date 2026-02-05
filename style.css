@@ -97,6 +97,20 @@ html[data-theme="light"] .markdown-section table {
     color: #24292f !important;
 }
 
+/* Fix Inline Code in Light Mode */
+html[data-theme="light"] .markdown-section code {
+    color: #24292f !important;
+    background-color: rgba(175, 184, 193, 0.2) !important;
+}
+
+/* Reset for Code Blocks in Light Mode to prevent double-styling/visual glitches */
+html[data-theme="light"] .markdown-section pre code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    color: inherit;
+    /* Allow syntax highlighting or parent color */
+}
+
 /* Transitions - Theme Switch Only */
 body[data-theme],
 .sidebar[data-theme] {
@@ -113,6 +127,8 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     -webkit-font-smoothing: antialiased;
+    cursor: text;
+    /* "I" cursor for the whole page */
 }
 
 .sidebar {
@@ -405,9 +421,8 @@ section.cover .cover-main>p:last-child a:hover {
     font-size: 3rem;
     margin-top: 0.2em !important;
     margin-bottom: 0.5rem;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--heading-color) !important;
+    /* Solid color fixes invisible emoji issue */
     display: inline-block;
 }
 
@@ -443,11 +458,25 @@ section.cover .cover-main>p:last-child a:hover {
     font-size: 0.9em;
 }
 
+/* Fix: Reset inner code styling for Pre blocks to prevent double padding/background */
+.markdown-section pre code {
+    padding: 0 !important;
+    background-color: transparent !important;
+    border-radius: 0;
+    color: inherit;
+}
+
 .markdown-section pre {
     background-color: var(--code-bg);
     border: 1px solid var(--sidebar-border);
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px !important;
+    /* Consistent, comfortable padding */
+    margin: 1.2em 0 !important;
+    /* Consistent vertical spacing */
+    position: relative;
+    /* For copy button positioning */
 }
 
 .markdown-section blockquote {
@@ -512,6 +541,12 @@ section.cover .cover-main>p:last-child a:hover {
 .markdown-section h6 a {
     text-decoration: none !important;
     border: none !important;
+    cursor: text !important;
+    /* No pointer cursor */
+    pointer-events: none !important;
+    /* No clicking */
+    color: inherit !important;
+    /* Look like regular text */
 }
 
 .markdown-section h1 a:hover,
