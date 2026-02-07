@@ -134,9 +134,8 @@
     }
 
     /* Hide the Vditor Hint Menu (abc, plantuml, etc.) completely */
-    .vditor-hint {
-      display: none !important;
-    }
+    /* Hide the Vditor Hint Menu (abc, plantuml, etc.) completely - REMOVED to fix UI */
+    /* .vditor-hint { display: none !important; } */
 
     /* --- VDITOR CODE BLOCK RESET (FINAL FIX) --- */
 
@@ -549,10 +548,14 @@
         hash = hash.split('?')[0];
 
         // 3. Default to README if empty
-        currentPath = hash || 'README';
-
-        // 4. Add extension if missing
-        if (!currentPath.endsWith('.md')) currentPath += '.md';
+        // 3. Default to README if empty or folder
+        if (!hash || hash.endsWith('/')) {
+          currentPath = (hash || '') + 'README.md';
+        } else {
+          currentPath = hash;
+          // 4. Add extension if missing
+          if (!currentPath.endsWith('.md')) currentPath += '.md';
+        }
 
         document.getElementById('editing-filename').innerText = currentPath;
 
@@ -577,7 +580,7 @@
 
               window.vditorInstance = new Vditor('vditor-editor', {
                 lang: 'en_US', // Fixes Chinese Tooltips
-                cdn: 'https://cdn.jsdelivr.net/npm/vditor', // Explicit CDN
+                cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6', // Explicit Stable Version
                 height: window.innerHeight - 100,
                 mode: 'ir', // Instant Rendering (Affine/Notion style)
                 theme: 'dark',
@@ -594,7 +597,7 @@
                 preview: {
                   theme: {
                     current: 'dark',
-                    path: 'https://unpkg.com/vditor/dist/css/content-theme'
+                    path: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6/dist/css/content-theme'
                   }
                 },
                 after: () => {
@@ -685,7 +688,6 @@
       themeColor: '#58a6ff',
       /* Fix Sidebar Flicker: Stop checking subfolders for _sidebar.md */
       alias: {
-        '/.*/_sidebar.md': '/_sidebar.md',
         '/.*/_navbar.md': '/_navbar.md'
       },
       loadSidebar: true,

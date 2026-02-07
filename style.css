@@ -266,20 +266,53 @@ body {
 }
 
 /* Scrollbar Styling */
-/* Hide Scrollbar for Chrome, Safari and Opera */
-html::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
+/* Scrollbar Stability - Prevents "Shake" on navigation */
+html {
+    scrollbar-gutter: stable !important;
 }
 
-/* Target ALL scrollbars in the app */
-::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: transparent !important;
+/* Smooth Entry Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animate Sidebar Items when they appear */
+.sidebar-nav li {
+    opacity: 0;
+    /* meaningful start state */
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Stagger animation for nested items */
+.sidebar-nav li li {
+    animation-delay: 0.1s;
+}
+
+/* Animate Main Content on page load - Slower and Smooth */
+.markdown-section {
+    opacity: 0;
+    /* Start invisible */
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.1s;
+    /* Wait just a tiny bit for sidebar to start */
 }
 
 .sidebar-nav ul li.active>a {
