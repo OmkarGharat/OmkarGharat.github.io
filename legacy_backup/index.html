@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Omkar's Digital Garden | Automation & Tech</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation Testing, QA, Code, and Digital Gardening.">
+  <meta name="keywords"
+    content="Omkar Gharat, Digital Garden, Automation Engineer, QA, Software Testing, Playwright, Cypress, Tech Blog, Portfolio">
+  <meta name="author" content="Omkar Gharat">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://omkargharat.netlify.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://omkargharat.netlify.app/">
+  <meta property="og:title" content="Omkar's Digital Garden">
+  <meta property="og:description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation Testing, QA, and Tech.">
+  <meta property="og:image" content="https://omkargharat.netlify.app/assets/images/logo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://omkargharat.netlify.app/">
+  <meta property="twitter:title" content="Omkar's Digital Garden">
+  <meta property="twitter:description"
+    content="Personal knowledge base and blog of Omkar Gharat. Exploring Automation, QA, and Tech.">
+  <meta property="twitter:image" content="https://omkargharat.netlify.app/assets/images/logo.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Omkar Gharat",
+    "url": "https://omkargharat.netlify.app/",
+    "sameAs": [
+      "https://github.com/OmkarGharat",
+      "https://www.linkedin.com/in/omkargharat/"
+    ],
+    "jobTitle": "Automation Engineer",
+    "description": "Digital Gardener and QA Automation Enthusiast."
+  }
+  </script>
+
+  <!-- Docsify Sidebar Collapse CSS -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+
+  <!-- Base Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify/themes/dark.css">
+
+  <!-- Custom Premium Theme -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ... (Existing Editor Styles) ... */
+    /* Sidebar Collapse Icon Color Fix for Dark Mode */
+    .sidebar-nav .app-sub-sidebar li::before {
+      color: #8b949e !important;
+    }
+  </style>
+
+
+  <!-- Editor CSS (Vditor) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
+  <!-- Netlify Identity Widget (Required for CMS Login) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    /* Global Editor Overrides for Premium Feel */
+    .vditor {
+      border: none !important;
+      background-color: #0f1115 !important;
+      --vditor-content-theme: dark;
+    }
+
+    .vditor-toolbar {
+      background-color: #161b22 !important;
+      border-bottom: 1px solid #30363d !important;
+      padding-left: 10px !important;
+      display: flex !important;
+    }
+
+    .vditor-content {
+      background-color: #0f1115 !important;
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    .vditor-reset {
+      color: #e6edf3 !important;
+    }
+
+    /* SVG Icon Sizing Fix */
+    .vditor-tooltipped svg {
+      width: 16px !important;
+      height: 16px !important;
+      fill: currentColor !important;
+    }
+
+    /* Remove Underline from Headings - GLOBAL FIX */
+    .vditor-reset h1,
+    .vditor-reset h2,
+    .markdown-section h1,
+    .markdown-section h2,
+    h1,
+    h2 {
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+    }
+
+    /* Fix Code Block Language Selector (Hint Menu) */
+    .vditor-hint {
+      background-color: #161b22 !important;
+      border: 1px solid #30363d !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+      color: #e6edf3 !important;
+      z-index: 5000 !important;
+    }
+
+    .vditor-hint button {
+      color: #e6edf3 !important;
+      background: transparent !important;
+      /* Remove any default white bg */
+      padding: 6px 12px !important;
+      border-radius: 4px;
+    }
+
+    .vditor-hint button:hover,
+    .vditor-hint button.vditor-hint--current {
+      background-color: #58a6ff !important;
+      color: #0f1115 !important;
+    }
+
+    /* Hide the Vditor Hint Menu (abc, plantuml, etc.) completely */
+    /* Hide the Vditor Hint Menu (abc, plantuml, etc.) completely - REMOVED to fix UI */
+    /* .vditor-hint { display: none !important; } */
+
+    /* --- VDITOR CODE BLOCK RESET (FINAL FIX) --- */
+
+    /* 1. The Container: Defines the dark box */
+    .vditor-ir__node[data-type="code-block"] {
+      background-color: #1f242c !important;
+      border: 1px solid #30363d !important;
+      border-radius: 6px !important;
+      margin: 10px 0 !important;
+      padding: 12px 14px !important;
+      display: block !important;
+    }
+
+    /* 2. Hide the Duplicate Preview completely */
+    .vditor-ir__preview,
+    .vditor-ir__node--preview .vditor-ir__preview {
+      display: none !important;
+    }
+
+    /* 3. FORCE VISIBILITY FOR EVERYTHING ELSE */
+    /* This includes the markers (```) AND the text content (pre/code) */
+    .vditor-ir__marker--pre,
+    .vditor-ir__node--preview .vditor-ir__marker--pre,
+    .vditor-ir__node[data-type="code-block"] pre,
+    .vditor-ir__node--preview pre,
+    .vditor-ir__node[data-type="code-block"] code,
+    .vditor-ir__node--preview code {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* 4. Formatting: Inner text styling */
+    .vditor-ir__node[data-type="code-block"] pre,
+    .vditor-ir__node[data-type="code-block"] code {
+      background-color: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      color: #e6edf3 !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+      white-space: pre-wrap !important;
+    }
+
+    /* 5. Styling for the backticks/language marker */
+    .vditor-ir__marker {
+      color: #6e7681 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    #cms-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: none;
+      /* Only show on localhost */
+      gap: 10px;
+    }
+
+    :root {
+      --btn-bg: linear-gradient(180deg, #a5b4fc 0%, #818cf8 100%);
+      --btn-text: #1e1b4b;
+      --btn-border: rgba(255, 255, 255, 0.3);
+      --btn-highlight: rgba(255, 255, 255, 0.5);
+      --btn-shadow: rgba(0, 0, 0, 0.1);
+      --btn-text-shadow: rgba(255, 255, 255, 0.3);
+    }
+
+    html[data-theme="light"] {
+      --btn-bg: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
+      --btn-text: #312e81;
+      --btn-border: rgba(0, 0, 0, 0.05);
+      --btn-highlight: rgba(255, 255, 255, 1);
+      --btn-shadow: rgba(0, 0, 0, 0.05);
+      --btn-text-shadow: rgba(255, 255, 255, 1);
+    }
+
+    .cms-btn {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      /* Deep Indigo for contrast */
+
+      /* Tactile 3D Shape */
+      border: 1px solid var(--btn-border);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      /* Highlights & Shadows */
+      box-shadow:
+        inset 0 1px 0 var(--btn-highlight),
+        0 4px 6px -1px var(--btn-shadow),
+        0 2px 4px -1px var(--btn-shadow);
+
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+
+      /* Engraved Icon/Text Look */
+      text-shadow: 0 1px 0 var(--btn-text-shadow);
+
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cms-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    #editor-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0f1115;
+      z-index: 2000;
+      display: none;
+      padding: 20px;
+    }
+
+    .EasyMDEContainer .CodeMirror {
+      background: #161b22;
+      color: #e6edf3;
+      border: 1px solid #30363d;
+    }
+
+    .editor-toolbar {
+      background: #1f242c;
+      border: 1px solid #30363d;
+    }
+
+    .editor-toolbar button {
+      color: #8b949e !important;
+    }
+
+    .editor-toolbar button.active,
+    .editor-toolbar button:hover {
+      background: #30363d !important;
+    }
+
+    /* Custom Modal Styles */
+    #cms-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cms-modal {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 30px;
+      border-radius: 20px;
+      width: 400px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    #cms-modal h3 {
+      margin-top: 0;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    #cms-modal label {
+      display: block;
+      margin-bottom: 8px;
+      color: #8b949e;
+      font-size: 14px;
+    }
+
+    #cms-modal input,
+    #cms-modal select {
+      width: 100%;
+      background: #0f1115;
+      border: 1px solid #30363d;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+
+    #cms-modal input:focus {
+      border-color: #58a6ff;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+  </style>
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div id="app">Please wait...</div>
+
+  <script>
+    // Create and inject hamburger menu into sidebar header
+    function createHamburgerMenu() {
+      const hamburger = document.createElement('div');
+      hamburger.id = 'mobile-nav-brand';
+      hamburger.title = 'Toggle Sidebar';
+      hamburger.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      `;
+
+      hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        console.log('[DEBUG] Hamburger clicked!');
+        if (document.querySelector('.sidebar-toggle')) {
+          console.log('[DEBUG] Clicking sidebar-toggle');
+          document.querySelector('.sidebar-toggle').click();
+        } else {
+          console.log('[DEBUG] Toggling close class on body');
+          document.body.classList.toggle('close');
+        }
+      });
+
+      return hamburger;
+    }
+
+    // Wait for Docsify to load, then inject hamburger into body
+    const injectHamburger = setInterval(() => {
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar && !document.getElementById('mobile-nav-brand')) {
+        const hamburger = createHamburgerMenu();
+        document.body.appendChild(hamburger);
+        clearInterval(injectHamburger);
+      }
+    }, 100);
+  </script>
+
+  <!-- Password Modal -->
+  <div id="password-modal-overlay"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 3001; align-items: center; justify-content: center;">
+    <div id="password-modal"
+      style="background: #161b22; border: 1px solid #30363d; padding: 30px; border-radius: 20px; width: 350px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+      <h3 style="margin-top: 0; color: white; margin-bottom: 20px;">Operator Login</h3>
+      <label style="display: block; margin-bottom: 8px; color: #8b949e; font-size: 14px;">Password</label>
+      <input type="password" id="cms-password-input" placeholder="Enter password..."
+        style="width: 100%; background: #0f1115; border: 1px solid #30363d; color: white; padding: 12px; border-radius: 10px; margin-bottom: 20px; box-sizing: border-box;">
+
+      <div class="modal-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="cms-btn" onclick="closePasswordModal()"
+          style="background:transparent; border:1px solid #30363d; color: white;">Cancel</button>
+        <button class="cms-btn" onclick="submitPassword()">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Modal -->
+  <div id="cms-modal-overlay">
+    <div id="cms-modal">
+      <h3>Create New Page</h3>
+      <label>Page Title</label>
+      <input type="text" id="new-page-title" placeholder="e.g. My New Adventure">
+
+      <label>Category / Folder</label>
+      <select id="new-page-folder">
+        <option value="blog/posts">Blog Post</option>
+        <option value="projects">Project</option>
+        <option value="guides">Guide</option>
+        <option value="/">Root Directory</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="cms-btn" onclick="closeCreateModal()"
+          style="background:transparent; border:1px solid #30363d; color: white;">Cancel</button>
+        <button class="cms-btn" onclick="submitCreatePage()">Create Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CMS Buttons -->
+  <div id="cms-controls">
+    <button class="cms-btn" onclick="openCreateModal()"><i data-lucide="plus-circle"></i> New Page</button>
+    <button class="cms-btn" onclick="toggleEditor()"><i data-lucide="edit-3"></i> Edit this Page</button>
+  </div>
+
+  <!-- Full Screen Editor -->
+  <div id="editor-container">
+    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin:0; color:white; font-family: 'Outfit', sans-serif;">Editing: <span id="editing-filename"
+          style="color:#58a6ff; font-weight: 400; font-size: 1.2rem;"></span></h2>
+      <div style="display:flex; gap:10px;">
+        <!-- Upload MD Button -->
+        <input type="file" id="md-file-upload" accept=".md" style="display:none" onchange="handleFileUpload(this)">
+        <button class="cms-btn" onclick="triggerFileUpload()" style="background:#1f6feb; color:white;"><i
+            data-lucide="upload"></i> Upload MD</button>
+
+        <button class="cms-btn" onclick="saveChanges()" style="background:#238636; color:white;"><i
+            data-lucide="check"></i> Save &
+          Close</button>
+        <button class="cms-btn" onclick="toggleEditor()" style="background:#da3633; color:white;"><i
+            data-lucide="x"></i>
+          Cancel</button>
+      </div>
+    </div>
+    <textarea id="markdown-editor"></textarea>
+  </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
+  <script>
+    // Initialize icons
+    setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+
+    let easyMDE;
+    let currentPath;
+
+    // --- PASSWORD PROTECTION ---
+    const CMS_CONFIG = {
+      hash: '965f7c320d3fdb98375837fa203bd8dcb71c8901' // Default: 'admin'
+    };
+
+    let pendingAction = null;
+
+    function isAuthenticated() {
+      return sessionStorage.getItem('cms_access') === 'true';
+    }
+
+    function requestAccess(actionCallback) {
+      if (isAuthenticated()) {
+        actionCallback();
+      } else {
+        pendingAction = actionCallback;
+        document.getElementById('password-modal-overlay').style.display = 'flex';
+        document.getElementById('cms-password-input').focus();
+      }
+    }
+
+    function submitPassword() {
+      const pass = document.getElementById('cms-password-input').value;
+      if (pass === 'admin') { // Replace 'admin' with your actual password check or hash check
+        sessionStorage.setItem('cms_access', 'true');
+        document.getElementById('password-modal-overlay').style.display = 'none';
+
+        if (pendingAction) {
+          pendingAction();
+          pendingAction = null;
+        }
+      } else {
+        alert("Access Denied");
+        document.getElementById('cms-password-input').value = '';
+        document.getElementById('cms-password-input').focus();
+      }
+    }
+
+    function closePasswordModal() {
+      document.getElementById('password-modal-overlay').style.display = 'none';
+      pendingAction = null;
+    }
+
+    // Allow Enter key to submit password
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && document.getElementById('password-modal-overlay').style.display === 'flex') {
+        submitPassword();
+      }
+    });
+
+    // Show CMS controls only on localhost AND with password
+    window.addEventListener('load', () => {
+      console.log("Checking CMS Access for: " + window.location.hostname);
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const controls = document.getElementById('cms-controls');
+        if (controls) controls.style.display = 'flex';
+      }
+    });
+
+    function toggleEditor() {
+      if (!isAuthenticated()) {
+        requestAccess(toggleEditor);
+        return;
+      }
+
+      const container = document.getElementById('editor-container');
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+      } else {
+        // Get current page path from docsify
+        // 1. Get hash (e.g. #/blog/posts/intro?id=title)
+        let hash = window.location.hash.slice(2);
+
+        // 2. Remove query params (e.g. ?id=...)
+        hash = hash.split('?')[0];
+
+        // 3. Default to README if empty
+        // 3. Default to README if empty or folder
+        if (!hash || hash.endsWith('/')) {
+          currentPath = (hash || '') + 'README.md';
+        } else {
+          currentPath = hash;
+          // 4. Add extension if missing
+          if (!currentPath.endsWith('.md')) currentPath += '.md';
+        }
+
+        document.getElementById('editing-filename').innerText = currentPath;
+
+        // Fetch current content
+        fetch(currentPath)
+          .then(res => {
+            if (!res.ok) throw new Error("File not found");
+            return res.text();
+          })
+          .then(content => {
+            // Vditor Initialization Logic
+            const editorEl = document.getElementById('markdown-editor');
+
+            if (!window.vditorInstance) {
+              // Hide original textarea
+              editorEl.style.display = 'none';
+
+              // Create container for Vditor
+              const vditorDiv = document.createElement('div');
+              vditorDiv.id = 'vditor-editor';
+              editorEl.parentNode.appendChild(vditorDiv);
+
+              window.vditorInstance = new Vditor('vditor-editor', {
+                lang: 'en_US', // Fixes Chinese Tooltips
+                cdn: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6', // Explicit Stable Version
+                height: window.innerHeight - 100,
+                mode: 'ir', // Instant Rendering (Affine/Notion style)
+                theme: 'dark',
+                value: content,
+                cache: {
+                  enable: false
+                },
+                toolbar: [
+                  'headings', 'bold', 'italic', 'strike', 'link', '|',
+                  'list', 'ordered-list', 'check', '|',
+                  'quote', 'line', 'code', 'inline-code', '|',
+                  'undo', 'redo', 'fullscreen', 'edit-mode'
+                ],
+                preview: {
+                  theme: {
+                    current: 'dark',
+                    path: 'https://cdn.jsdelivr.net/npm/vditor@3.9.6/dist/css/content-theme'
+                  }
+                },
+                after: () => {
+                  // Ensure premium dark background matches
+                  const contentEl = vditorDiv.querySelector('.vditor-content');
+                  if (contentEl) contentEl.style.backgroundColor = '#0f1115';
+                }
+              });
+            } else {
+              // Update existing instance
+              window.vditorInstance.setValue(content);
+            }
+
+            container.style.display = 'block';
+          });
+      }
+    }
+
+    function saveChanges() {
+      const content = window.vditorInstance.getValue();
+      fetch('/api/save', {
+        method: 'POST',
+        body: JSON.stringify({ path: currentPath, content: content })
+      }).then(() => {
+        window.location.reload();
+      });
+    }
+
+    function openCreateModal() {
+      if (!isAuthenticated()) {
+        requestAccess(openCreateModal);
+        return;
+      }
+      document.getElementById('cms-modal-overlay').style.display = 'flex';
+      document.getElementById('new-page-title').focus();
+    }
+
+    function closeCreateModal() {
+      document.getElementById('cms-modal-overlay').style.display = 'none';
+    }
+
+    function submitCreatePage() {
+      const title = document.getElementById('new-page-title').value;
+      const folder = document.getElementById('new-page-folder').value;
+
+      if (!title) return alert("Please enter a title");
+
+      fetch('/api/create', {
+        method: 'POST',
+        body: JSON.stringify({ title, folder })
+      })
+        .then(res => res.json())
+        .then(data => {
+          window.location.hash = '#' + data.path;
+          window.location.reload();
+        });
+    }
+
+    // --- UPLOAD MD FILE LOGIC ---
+    function triggerFileUpload() {
+      document.getElementById('md-file-upload').click();
+    }
+
+    function handleFileUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          if (window.vditorInstance) {
+            window.vditorInstance.setValue(e.target.result);
+            // Re-render icons after new content load just in case
+            setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+          }
+        };
+
+        reader.readAsText(file);
+        // Reset input so same file can be selected again if needed
+        input.value = '';
+      }
+    }
+
+    window.$docsify = {
+      name: '',
+      logo: '', // Managed manually via script below
+      nameLink: '/#/',
+      repo: '',
+      themeColor: '#58a6ff',
+      /* Fix Sidebar Flicker: Stop checking subfolders for _sidebar.md */
+      alias: {
+        '/.*/_navbar.md': '/_navbar.md'
+      },
+      loadSidebar: true,
+      loadNavbar: true,
+      coverpage: true,
+      auto2top: true,
+      subMaxLevel: 0, /* Disable TOC extraction - headings won't show in sidebar */
+      sidebarDisplayLevel: 0, /* Start collapsed */
+
+      /* Sidebar Collapse Plugin */
+      sidebarCollapse: {
+        change: true, // default: true
+        changeLevel: 1 // default: 1
+      },
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: 'Type to search...',
+        noData: 'No results found.',
+        depth: 6,
+        hideOtherSidebarContent: false,
+      },
+      copyCode: {
+        buttonText: 'Copy',
+        errorText: 'Error',
+        successText: 'Copied'
+      },
+      // Plugins or Markdown Hook to hide YAML Front Matter
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            // Default code block rendering
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      plugins: [
+        function (hook, vm) {
+          hook.beforeEach(function (content) {
+            // STRIP YAML FRONT MATTER BEFORE RENDERING
+            // Flexible match for --- (data) --- with any line endings
+            return content.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---\s*[\r\n]*/, '');
+          });
+
+          // MANUAL LOGO & TOGGLE INJECTION
+          hook.doneEach(function () {
+            const sidebar = document.querySelector('.sidebar');
+
+            // 1. Inject Logo
+            if (sidebar && !sidebar.querySelector('.app-name')) {
+              const h1 = document.createElement('h1');
+              h1.className = 'app-name';
+              const currentTheme = localStorage.getItem('theme') || 'dark';
+              const logoSrc = currentTheme === 'light' ? 'assets/images/logo_light.png' : 'assets/images/logo_dark.png';
+              h1.innerHTML = `<a class="app-name-link" href="/#/"><img src="${logoSrc}" alt="OG Logo"></a>`;
+              sidebar.insertBefore(h1, sidebar.firstChild);
+            }
+
+            // 2. Inject Theme Dropdown (Sidebar Footer)
+            if (sidebar && !sidebar.querySelector('.sidebar-footer')) {
+              const footer = document.createElement('div');
+              footer.className = 'sidebar-footer';
+              footer.style.cssText = `
+                    padding: 20px; 
+                    margin-top: auto; /* Push to bottom if sidebar flex */
+                    border-top: 1px solid var(--sidebar-border);
+                 `;
+
+              const label = document.createElement('div');
+              label.textContent = "Theme";
+              label.style.fontWeight = "600";
+              label.style.marginBottom = "8px";
+              label.style.fontSize = "14px";
+
+              const select = document.createElement('select');
+              select.style.cssText = `
+                    width: 100%; padding: 8px; border-radius: 6px;
+                    background: var(--code-bg); color: var(--text-color);
+                    border: 1px solid var(--sidebar-border);
+                    outline: none; cursor: pointer;
+                 `;
+
+              const optDark = document.createElement('option');
+              optDark.value = 'dark'; optDark.innerText = '🌙 Dark Mode';
+              const optLight = document.createElement('option');
+              optLight.value = 'light'; optLight.innerText = '☀️ Light Mode';
+
+              select.appendChild(optDark);
+              select.appendChild(optLight);
+
+              // Set initial value
+              const saved = localStorage.getItem('theme') || 'dark';
+              select.value = saved;
+
+              select.onchange = (e) => setTheme(e.target.value);
+
+              footer.appendChild(label);
+              footer.appendChild(select);
+              sidebar.appendChild(footer);
+            }
+          });
+        }
+      ]
+    }
+  </script>
+
+  <!-- Docsify Core -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+
+  <!-- Theme Logic Handlers -->
+  <script>
+    // Global Theme Setter functions
+    const themeLink = document.querySelector('link[href*="docsify/themes"]');
+
+    function setTheme(mode) {
+      if (mode === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeLink.href = 'https://cdn.jsdelivr.net/npm/docsify/themes/vue.css';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeLink.href = 'https://cdn.jsdelivr.net/npm/docsify/themes/dark.css';
+      }
+      localStorage.setItem('theme', mode);
+
+      // Update Logo dynamically
+      const logoImg = document.querySelector('.app-name-link img');
+      if (logoImg) {
+        logoImg.src = mode === 'light' ? 'assets/images/logo_light.png' : 'assets/images/logo_dark.png';
+      }
+    }
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') setTheme('light');
+
+
+  </script>
+
+  <!-- Plugins -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+</body>
+
+</html>
