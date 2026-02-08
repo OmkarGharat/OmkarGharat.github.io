@@ -1,0 +1,38 @@
+backend:
+  name: github
+  repo: OmkarGharat/OmkarGharat.github.io
+  branch: main
+  site_url: https://omkargharat.github.io
+  base_url: https://omkargharat.github.io
+  auth_endpoint: api/auth
+media_folder: "public/images"
+public_folder: "/images"
+
+# Collections
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Body", name: "body", widget: "markdown"}
+  - name: "projects"
+    label: "Projects"
+    folder: "content/projects"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Body", name: "body", widget: "markdown"}
+  - name: "guides"
+    label: "Guides"
+    folder: "content/docs/guides"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Body", name: "body", widget: "markdown"}

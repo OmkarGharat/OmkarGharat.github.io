@@ -23,7 +23,9 @@ export const docs = defineDocs({
 export const blog = defineDocs({
   dir: 'content/blog',
   docs: {
-    schema,
+    schema: schema.extend({
+      date: z.string().date().or(z.date()).optional(),
+    }),
     postprocess: {
       includeProcessedMarkdown: true,
     },
